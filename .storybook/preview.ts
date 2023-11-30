@@ -1,4 +1,9 @@
 import type { Preview } from '@storybook/react';
+import { worker } from '../mocks/worker';
+
+if (typeof global.process === 'undefined') {
+  worker.start();
+}
 
 const preview: Preview = {
   parameters: {
