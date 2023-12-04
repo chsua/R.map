@@ -1,5 +1,5 @@
-import { Size } from '@/types/style';
 import { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react';
+import { Size } from 'types/style';
 
 interface BottomSheetProps {
   children?: ReactNode;

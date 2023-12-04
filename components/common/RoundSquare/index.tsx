@@ -1,5 +1,5 @@
-import { Size } from '@/types/style';
 import { ReactNode } from 'react';
+import { Size } from 'types/style';
 
 interface RoundSquareProps {
   children?: ReactNode;
