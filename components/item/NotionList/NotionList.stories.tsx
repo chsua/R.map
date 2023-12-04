@@ -1,0 +1,23 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+
+import NotionList from '.';
+
+/**
+ * 더하기버튼을 누르면 개념을 추가할 수 있음
+ */
+const meta = {
+  title: 'component/NotionList',
+  component: NotionList,
+  tags: ['autodocs'],
+  parameters: {
+    componentSubtitle: '개념 목록',
+  },
+} satisfies Meta<typeof NotionList>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: { handlePlusButtonClick: action('더하기 버튼 클릭 이벤트 발생') },
+};
