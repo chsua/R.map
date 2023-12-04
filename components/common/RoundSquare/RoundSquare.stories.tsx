@@ -4,7 +4,8 @@ import MoreMenuButton from '../MoreMenuButton';
 
 /**
  * - 내부에 string, div 등 제한없이 넣을 수 있으며 자동으로 가로, 세로 중앙으로 배치됨
- * - 사이즈는 "sm" , "md", "lg"로 구분
+ * - 사이즈는 "sm" , "md", "lg", "free"로 구분
+ *  - "free"는 내부 컨텐트에 맞춰짐
  * - hover시 색이 변화
  */
 const meta = {
