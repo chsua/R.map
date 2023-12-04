@@ -7,19 +7,19 @@ import RoundSquare from '../../common/RoundSquare';
 interface NotionItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string;
   handleNotionItemClick: () => void;
-  handleMoreNotionButtonClick: () => void;
+  handleMoreMenuButtonClick: () => void;
 }
 
 export default function NotionItem({
   content,
   handleNotionItemClick,
-  handleMoreNotionButtonClick,
+  handleMoreMenuButtonClick,
 }: NotionItemProps) {
   const handleMoreNotionButtonClickWithoutBubbling: MouseEventHandler<
     HTMLButtonElement
   > = (event) => {
     event.stopPropagation();
-    handleMoreNotionButtonClick();
+    handleMoreMenuButtonClick();
   };
 
   return (
