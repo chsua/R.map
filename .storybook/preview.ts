@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react';
 import { worker } from '../mocks/worker';
+import '../app/globals.css';
 
 if (typeof global.process === 'undefined') {
   worker.start();
