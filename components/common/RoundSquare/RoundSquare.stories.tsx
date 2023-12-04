@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import RoundSquare from '.';
+import MoreMenuButton from '../MoreMenuButton';
 
 /**
  * - 내부에 string, div 등 제한없이 넣을 수 있으며 자동으로 가로, 세로 중앙으로 배치됨
+ * - 사이즈는 "sm" , "md", "lg"로 구분
  * - hover시 색이 변화
  */
 const meta = {
@@ -22,7 +24,7 @@ type Story = StoryObj<typeof meta>;
  */
 export const StringChildren: Story = {
   args: {
-    children: 'dddd',
+    children: '예시입니다',
   },
 };
 
@@ -56,6 +58,29 @@ export const MultiChildren: Story = {
           색색이 달라지는 예시
         </div>
       </>
+    ),
+  },
+};
+
+/**
+ * 실제 사용 예시
+ */
+export const RealUsing: Story = {
+  args: {
+    size: 'sm',
+    children: (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '90%',
+          gap: '5px',
+        }}
+      >
+        <p>여기에 개념 이름이 들어가게 됩니다.</p>
+        <MoreMenuButton direction="column" size="sm" />
+      </div>
     ),
   },
 };
