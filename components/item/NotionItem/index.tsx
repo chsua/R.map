@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes } from 'react';
 
-import MoreMenuButton from '../common/MoreMenuButton';
-import CircleLine from '../common/CircleLine';
-import RoundSquare from '../common/RoundSquare';
+import MoreMenuButton from '../../common/MoreMenuButton';
+import CircleLine from '../../common/CircleLine';
+import RoundSquare from '../../common/RoundSquare';
 
 interface NotionItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string;

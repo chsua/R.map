@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 
-import RoundSquare from '../common/RoundSquare';
+import RoundSquare from '../../common/RoundSquare';
 
 import { Size } from '@/types/style';
 
