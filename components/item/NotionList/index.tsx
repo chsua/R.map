@@ -15,7 +15,7 @@ export default function NotionList({
   handleNotionItemClick,
 }: NotionListProps) {
   return (
-    <ul className="flex gap-2 flex-col">
+    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       {notionList.map((item) => {
         return (
           <li key={item.name}>
