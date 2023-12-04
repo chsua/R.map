@@ -5,9 +5,15 @@ import PlusNotionButton from '../PlusNotionButton';
 
 interface NotionListProps {
   handlePlusButtonClick: () => void;
+  handleMoreMenuButtonClick: () => void;
+  handleNotionItemClick: () => void;
 }
 
-export default function NotionList({ handlePlusButtonClick }: NotionListProps) {
+export default function NotionList({
+  handlePlusButtonClick,
+  handleMoreMenuButtonClick,
+  handleNotionItemClick,
+}: NotionListProps) {
   return (
     <ul className="flex gap-2 flex-col">
       {notionList.map((item) => {
@@ -15,8 +21,8 @@ export default function NotionList({ handlePlusButtonClick }: NotionListProps) {
           <li key={item.name}>
             <NotionItem
               content={item.name}
-              handleMoreNotionButtonClick={() => {}}
-              handleNotionItemClick={() => {}}
+              handleMoreMenuButtonClick={handleMoreMenuButtonClick}
+              handleNotionItemClick={handleNotionItemClick}
             />
           </li>
         );
