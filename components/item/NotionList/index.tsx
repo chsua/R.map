@@ -6,7 +6,7 @@ import PlusNotionButton from '../PlusNotionButton';
 interface NotionListProps {
   handlePlusButtonClick: () => void;
   handleMoreMenuButtonClick: () => void;
-  handleNotionItemClick: () => void;
+  handleNotionItemClick: (id: number) => void;
 }
 
 export default function NotionList({
@@ -22,7 +22,7 @@ export default function NotionList({
             <NotionItem
               content={item.name}
               handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-              handleNotionItemClick={handleNotionItemClick}
+              handleNotionItemClick={() => handleNotionItemClick(item.id)}
             />
           </li>
         );

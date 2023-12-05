@@ -3,18 +3,19 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { worker } from '../mocks/worker';
 
+import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
-import NotionList from '@components/item/NotionList';
 import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 
-type Content = 'notionItemForm' | 'notionItemPlusMenu' | 'notionItem';
+import { useRouter } from 'next/navigation';
+
+type Content = 'notionItemForm' | 'notionItemPlusMenu';
 
 const content: Record<Content, ReactNode> = {
   notionItemForm: <NotionForm />,
   notionItemPlusMenu: <></>,
-  notionItem: <></>,
 };
 
 export default function Home() {
@@ -32,9 +33,14 @@ export default function Home() {
   //   })();
   // }, []);
 
+  const router = useRouter();
   const [bottomSheetContent, setBottomSheetContent] = useState<Content | null>(
     null,
   );
+
+  const moveNotionItemPage = (id: number) => {
+    router.push(`/notion/${id}`, { scroll: true });
+  };
 
   return (
     <main className="flex flex-col gap-5">
@@ -45,7 +51,7 @@ export default function Home() {
         handleMoreMenuButtonClick={() =>
           setBottomSheetContent('notionItemPlusMenu')
         }
-        handleNotionItemClick={() => setBottomSheetContent('notionItem')}
+        handleNotionItemClick={moveNotionItemPage}
       />
       {bottomSheetContent && (
         <BottomSheet closeEvent={() => setBottomSheetContent(null)}>
