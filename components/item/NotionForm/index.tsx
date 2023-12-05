@@ -17,7 +17,9 @@ export default function NotionForm() {
         />
       </RoundSquare>
       <RoundSquare>
-        <button type="submit">확 인</button>
+        <button type="submit" className="w-full h-full">
+          확 인
+        </button>
       </RoundSquare>
     </form>
   );
