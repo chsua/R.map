@@ -1,4 +1,6 @@
-export const notionBanana = {
+import { Notion } from 'types/notion';
+
+export const mockNotionBanana: Notion = {
   id: 0,
   name: '바나나',
   description: '노랗고 달달한 더운 지역에서 재배되는 과일',
@@ -18,7 +20,7 @@ export const notionBanana = {
   ],
 };
 
-export const notionApple = {
+export const mockNotionApple: Notion = {
   id: 5,
   name: '사과',
   description: '빨갛고 동그란, 나무에 열리는 과실',
@@ -34,7 +36,7 @@ export const notionApple = {
   ],
 };
 
-export const notionBear = {
+export const mockNotionBear: Notion = {
   id: 9,
   name: '곰',
   description: '겨울잠을 자는 크고 힘이 쎈 동물',
@@ -46,4 +48,8 @@ export const notionBear = {
   ],
 };
 
-export const notionList = [notionBear, notionApple, notionBanana];
+export const mockNotionList: Notion[] = [
+  mockNotionBear,
+  mockNotionApple,
+  mockNotionBanana,
+];
