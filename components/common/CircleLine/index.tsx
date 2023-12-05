@@ -8,7 +8,7 @@ export default function CircleLine({
   amount = 5,
 }: CircleLineProps) {
   return (
-    <button
+    <div
       className={`w-fit h-fit flex justify-center items-center ${
         direction === 'row' ? 'flex-row' : 'flex-col'
       } gap-1`}
@@ -16,6 +16,6 @@ export default function CircleLine({
       {new Array(amount).fill(0).map((_, index) => (
         <div key={index} className="w-2 h-2 bg-slate-400 rounded-full" />
       ))}
-    </button>
+    </div>
   );
 }

@@ -7,7 +7,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <div className="w-[95vw] sm:w-[90vw] md:w-[80vw] h-[90vh] mt-[5vh] m-auto ">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

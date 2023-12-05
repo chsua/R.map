@@ -1,8 +1,8 @@
 import { ButtonHTMLAttributes } from 'react';
 
-import RoundSquare from '../common/RoundSquare';
+import RoundSquare from '../../common/RoundSquare';
 
-import { Size } from '@/types/style';
+import { Size } from 'types/style';
 
 interface PlusNotionButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,10 +17,15 @@ const sizeStyle: Record<Size, string> = {
 
 export default function PlusNotionButton({
   size = 'sm',
+  ...rest
 }: PlusNotionButtonProps) {
   return (
     <RoundSquare size={size}>
-      <button aria-label="더하기 버튼" className={`w-full ${sizeStyle[size]}`}>
+      <button
+        aria-label="더하기 버튼"
+        className={`w-full ${sizeStyle[size]}`}
+        {...rest}
+      >
         +
       </button>
     </RoundSquare>

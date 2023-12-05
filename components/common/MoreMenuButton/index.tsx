@@ -1,5 +1,5 @@
-import { Size } from '@/types/style';
 import { ButtonHTMLAttributes } from 'react';
+import { Size } from 'types/style';
 
 interface MoreMenuButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   direction?: 'row' | 'column';
