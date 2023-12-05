@@ -1,4 +1,5 @@
-import { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react';
+import { useKeyEscClose } from 'hooks/useKeyEscClose';
+import { MouseEventHandler, ReactNode } from 'react';
 import { Size } from 'types/style';
 
 interface BottomSheetProps {
@@ -18,6 +19,8 @@ export default function BottomSheet({
   size = 'md',
   closeEvent,
 }: BottomSheetProps) {
+  const closeModalKeyboardEvent = useKeyEscClose(closeEvent);
+
   const closeModalClickEvent: MouseEventHandler<
     HTMLDivElement | HTMLButtonElement
   > = (event) => {
@@ -30,16 +33,12 @@ export default function BottomSheet({
       closeEvent();
   };
 
-  const keyPressEvent: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    if (event.key === 'Escape') closeEvent();
-  };
-
   return (
     <div
       id="bottom-sheet-backdrop"
       className="fixed inset-0 bg-black/30 z-10 flex justify-center items-end"
       onClick={closeModalClickEvent}
-      onKeyUp={keyPressEvent}
+      onKeyUp={() => closeModalKeyboardEvent}
       aria-label="모달"
     >
       <button
