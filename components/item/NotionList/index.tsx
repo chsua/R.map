@@ -1,15 +1,17 @@
-import { notionList } from '@mocks/mockData/notionList';
-
 import NotionItem from '../NotionItem';
 import PlusNotionButton from '../PlusNotionButton';
 
+import { essenceNotion } from 'types/notion';
+
 interface NotionListProps {
+  notionList: essenceNotion[];
   handlePlusButtonClick: () => void;
   handleMoreMenuButtonClick: () => void;
   handleNotionItemClick: (id: number) => void;
 }
 
 export default function NotionList({
+  notionList,
   handlePlusButtonClick,
   handleMoreMenuButtonClick,
   handleNotionItemClick,

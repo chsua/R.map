@@ -10,6 +10,7 @@ import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 
 import { useRouter } from 'next/navigation';
+import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notionList';
 
 type Content = 'notionItemForm' | 'notionItemPlusMenu';
 
@@ -47,6 +48,10 @@ export default function Home() {
       <Title content="개념" />
       <CircleLine amount={8} />
       <NotionList
+        notionList={[
+          ...mockNotionBear.relatedNotionList,
+          ...mockNotionBanana.relatedNotionList,
+        ]}
         handlePlusButtonClick={() => setBottomSheetContent('notionItemForm')}
         handleMoreMenuButtonClick={() =>
           setBottomSheetContent('notionItemPlusMenu')
