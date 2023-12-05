@@ -24,17 +24,17 @@ export default function NotionItem({
 
   return (
     <RoundSquare size="sm">
-      <button
+      <div
         className="w-[90%] flex flex-row items-center justify-between gap-2"
         onClick={handleNotionItemClick}
       >
         <CircleLine amount={1} />
-        <p className="w-full truncate text-left">{content}</p>
+        <button className="w-full truncate text-left">{content}</button>
         <MoreMenuButton
           size="sm"
           onClick={handleMoreNotionButtonClickWithoutBubbling}
         />
-      </button>
+      </div>
     </RoundSquare>
   );
 }
