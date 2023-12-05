@@ -13,7 +13,7 @@ export default function NotionForm() {
       <RoundSquare size="free">
         <textarea
           placeholder="개념 설명을 입력해주세요"
-          className="bg-transparent w-full resize-none h-[220px] p-3  focus:outline-none"
+          className="bg-transparent w-full resize-none h-[calc(35vh-110px)] p-3  focus:outline-none"
         />
       </RoundSquare>
       <RoundSquare>

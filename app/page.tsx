@@ -1,21 +1,12 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
-import { worker } from '../mocks/worker';
-
+import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
-import NotionList from '@components/item/NotionList';
-import BottomSheet from '@components/common/BottomSheet';
-import NotionForm from '@components/item/NotionForm';
 
-type Content = 'notionItemForm' | 'notionItemPlusMenu' | 'notionItem';
-
-const content: Record<Content, ReactNode> = {
-  notionItemForm: <NotionForm />,
-  notionItemPlusMenu: <></>,
-  notionItem: <></>,
-};
+import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notionList';
+import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
+import { useMovePage } from 'hooks/useMovePage';
 
 export default function Home() {
   // if (process.env.NODE_ENV === 'development') {
@@ -32,26 +23,28 @@ export default function Home() {
   //   })();
   // }, []);
 
-  const [bottomSheetContent, setBottomSheetContent] = useState<Content | null>(
-    null,
-  );
+  const {
+    handlePlusButtonClick,
+    handleMoreMenuButtonClick,
+    bottomSheetComponent,
+  } = useBottomSheetContent();
+
+  const { moveNotionItemPage } = useMovePage();
 
   return (
     <main className="flex flex-col gap-5">
       <Title content="개념" />
       <CircleLine amount={8} />
       <NotionList
-        handlePlusButtonClick={() => setBottomSheetContent('notionItemForm')}
-        handleMoreMenuButtonClick={() =>
-          setBottomSheetContent('notionItemPlusMenu')
-        }
-        handleNotionItemClick={() => setBottomSheetContent('notionItem')}
+        notionList={[
+          ...mockNotionBear.relatedNotionList,
+          ...mockNotionBanana.relatedNotionList,
+        ]}
+        handlePlusButtonClick={handlePlusButtonClick}
+        handleMoreMenuButtonClick={handleMoreMenuButtonClick}
+        handleNotionItemClick={moveNotionItemPage}
       />
-      {bottomSheetContent && (
-        <BottomSheet closeEvent={() => setBottomSheetContent(null)}>
-          {content[bottomSheetContent]}
-        </BottomSheet>
-      )}
+      {bottomSheetComponent}
     </main>
   );
 }
