@@ -1,11 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { worker } from '../mocks/worker';
 
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 import NotionList from '@components/item/NotionList';
+import BottomSheet from '@components/common/BottomSheet';
+import NotionForm from '@components/item/NotionForm';
+
+type Content = 'notionItemForm' | 'notionItemPlusMenu' | 'notionItem';
+
+const content: Record<Content, ReactNode> = {
+  notionItemForm: <NotionForm />,
+  notionItemPlusMenu: <></>,
+  notionItem: <></>,
+};
 
 export default function Home() {
   // if (process.env.NODE_ENV === 'development') {
@@ -22,15 +32,26 @@ export default function Home() {
   //   })();
   // }, []);
 
+  const [bottomSheetContent, setBottomSheetContent] = useState<Content | null>(
+    null,
+  );
+
   return (
     <main className="flex flex-col gap-5">
       <Title content="개념" />
       <CircleLine amount={8} />
       <NotionList
-        handlePlusButtonClick={() => {}}
-        handleMoreMenuButtonClick={() => {}}
-        handleNotionItemClick={() => {}}
+        handlePlusButtonClick={() => setBottomSheetContent('notionItemForm')}
+        handleMoreMenuButtonClick={() =>
+          setBottomSheetContent('notionItemPlusMenu')
+        }
+        handleNotionItemClick={() => setBottomSheetContent('notionItem')}
       />
+      {bottomSheetContent && (
+        <BottomSheet closeEvent={() => setBottomSheetContent(null)}>
+          {content[bottomSheetContent]}
+        </BottomSheet>
+      )}
     </main>
   );
 }
