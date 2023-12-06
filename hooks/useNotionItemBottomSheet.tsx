@@ -2,18 +2,22 @@ import { ReactNode, useState } from 'react';
 
 import NotionForm from '@components/item/NotionForm';
 import BottomSheet from '@components/common/BottomSheet';
+import { Notion } from 'types/notion';
 
 type Content = 'notionItemForm' | 'notionItemPlusMenu';
 
-const content: Record<Content, ReactNode> = {
-  notionItemForm: <NotionForm />,
-  notionItemPlusMenu: <></>,
-};
-
-export const useBottomSheetContent = () => {
+export const useNotionItemBottomSheet = (
+  type: 'make' | 'edit',
+  notion?: Notion,
+) => {
   const [bottomSheetContent, setBottomSheetContent] = useState<Content | null>(
     null,
   );
+
+  const content: Record<Content, ReactNode> = {
+    notionItemForm: <NotionForm type={type} data={notion} />,
+    notionItemPlusMenu: <></>,
+  };
 
   return {
     handlePlusButtonClick: () => setBottomSheetContent('notionItemForm'),

@@ -5,7 +5,7 @@ import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 
 import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notionList';
-import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
+import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
     bottomSheetComponent,
-  } = useBottomSheetContent();
+  } = useNotionItemBottomSheet('make');
 
   const { moveNotionItemPage } = useMovePage();
 

@@ -8,24 +8,25 @@ import Description from '@components/common/Description';
 import Title from '@components/common/Title';
 import NotionList from '@components/item/NotionList';
 
-import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
+import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
 import { Notion } from 'types/notion';
 
-export default function play({ params }: { params: { id: number } }) {
+export default function notion({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
 
   const { addNotionItem } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
 
+  //현재는 수정기능이 없으므로 "make"로 설정
   const {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
     bottomSheetComponent,
-  } = useBottomSheetContent();
+  } = useNotionItemBottomSheet('make', data);
 
   const url = GET_URL.NOTION_ITEM(params.id);
 
