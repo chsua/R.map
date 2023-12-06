@@ -14,8 +14,18 @@ export const useNotionItemBottomSheet = (
     null,
   );
 
+  const resetBottomSheetContent = () => {
+    setBottomSheetContent(null);
+  };
+
   const content: Record<Content, ReactNode> = {
-    notionItemForm: <NotionForm type={type} data={notion} />,
+    notionItemForm: (
+      <NotionForm
+        type={type}
+        data={notion}
+        submitEvent={resetBottomSheetContent}
+      />
+    ),
     notionItemPlusMenu: <></>,
   };
 
@@ -24,7 +34,7 @@ export const useNotionItemBottomSheet = (
     handleMoreMenuButtonClick: () =>
       setBottomSheetContent('notionItemPlusMenu'),
     bottomSheetComponent: bottomSheetContent ? (
-      <BottomSheet closeEvent={() => setBottomSheetContent(null)}>
+      <BottomSheet closeEvent={resetBottomSheetContent}>
         {content[bottomSheetContent]}
       </BottomSheet>
     ) : (
