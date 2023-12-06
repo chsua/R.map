@@ -14,8 +14,8 @@ export const getNotionItem = [
   }),
 ];
 
-// export const notionItem = [
-//   rest.get('/example', (req, res, ctx) => {
-//     return res(ctx.status(200), ctx.json("hi! It's mockData"));
-//   }),
-// ];
+export const postNotionItem = [
+  rest.post('/notions', (req, res, ctx) => {
+    return res(ctx.status(201), ctx.json({ id: Date.now() }));
+  }),
+];

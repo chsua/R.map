@@ -1,3 +1,3 @@
-import { getNotionItem } from './notionItem';
+import { getNotionItem, postNotionItem } from './notionItem';
 
-export const handlers = [...getNotionItem];
+export const handlers = [...getNotionItem, ...postNotionItem];
