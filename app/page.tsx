@@ -9,20 +9,6 @@ import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
 import { useMovePage } from 'hooks/useMovePage';
 
 export default function Home() {
-  // if (process.env.NODE_ENV === 'development') {
-  //   worker.start();
-  // }
-
-  // const [data, setData] = useState();
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch('/example', { method: 'get' });
-  //     const data = await response.json();
-  //     setData(data);
-  //   })();
-  // }, []);
-
   const {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
