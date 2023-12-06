@@ -1,18 +1,23 @@
 'use client';
 
-import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
+import { useEffect, useState } from 'react';
 
+import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 import CircleLine from '@components/common/CircleLine';
 import Description from '@components/common/Description';
 import Title from '@components/common/Title';
 import NotionList from '@components/item/NotionList';
 
-import { mockNotionBanana } from '@mocks/mockData/notionList';
-
 import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
 import { useMovePage } from 'hooks/useMovePage';
 
+import { GET_URL } from 'constants/url';
+import { getFetch } from 'utils/fetch';
+import { Notion } from 'types/notion';
+
 export default function play({ params }: { params: { id: number } }) {
+  const [data, setData] = useState<Notion>();
+
   const { addNotionItem } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
 
@@ -22,26 +27,34 @@ export default function play({ params }: { params: { id: number } }) {
     bottomSheetComponent,
   } = useBottomSheetContent();
 
-  //추후 fetch한 데이터로 수정
-  const { id, name, description, relatedNotionList } = mockNotionBanana;
+  const url = GET_URL.NOTION_ITEM(params.id);
 
   const handleNotionItemClick = () => (id: number) => {
-    addNotionItem({ id, name });
+    data && addNotionItem({ id: params.id, name: data.name });
     moveNotionItemPage(id);
   };
 
+  useEffect(() => {
+    (async () => {
+      const data = await getFetch<Notion>(url);
+      setData(data);
+    })();
+  }, []);
+
   return (
-    <main className="flex flex-col gap-5">
-      <Title content={name} />
-      <CircleLine amount={8} />
-      <Description content={description} />
-      <NotionList
-        notionList={relatedNotionList}
-        handlePlusButtonClick={handlePlusButtonClick}
-        handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-        handleNotionItemClick={() => handleNotionItemClick()}
-      />
-      {bottomSheetComponent}
-    </main>
+    data && (
+      <main className="flex flex-col gap-5">
+        <Title content={data.name} />
+        <CircleLine amount={8} />
+        <Description content={data.description} />
+        <NotionList
+          notionList={data.relatedNotionList}
+          handlePlusButtonClick={handlePlusButtonClick}
+          handleMoreMenuButtonClick={handleMoreMenuButtonClick}
+          handleNotionItemClick={() => handleNotionItemClick()}
+        />
+        {bottomSheetComponent}
+      </main>
+    )
   );
 }
