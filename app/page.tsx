@@ -4,30 +4,16 @@ import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 
-import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notionList';
-import { useBottomSheetContent } from 'hooks/useBottomSheetContent';
+import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notion';
+import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
 export default function Home() {
-  // if (process.env.NODE_ENV === 'development') {
-  //   worker.start();
-  // }
-
-  // const [data, setData] = useState();
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch('/example', { method: 'get' });
-  //     const data = await response.json();
-  //     setData(data);
-  //   })();
-  // }, []);
-
   const {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
     bottomSheetComponent,
-  } = useBottomSheetContent();
+  } = useNotionItemBottomSheet('make');
 
   const { moveNotionItemPage } = useMovePage();
 

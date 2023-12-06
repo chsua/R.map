@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { mockNotionBanana } from '@mocks/mockData/notionList';
+import { mockNotionBanana } from '@mocks/mockData/notion';
 
 import NotionList from '.';
 
