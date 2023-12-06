@@ -4,7 +4,7 @@ import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 
-import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notionList';
+import { mockNotionBanana, mockNotionBear } from '@mocks/mockData/notion';
 import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 

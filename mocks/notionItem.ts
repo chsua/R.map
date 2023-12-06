@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { findMockNotionItem } from './mockData/notionList';
+import { findMockNotionItem } from './mockData/notion';
 
 export const getNotionItem = [
   rest.get('/notions/:id', (req, res, ctx) => {
