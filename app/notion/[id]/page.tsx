@@ -29,7 +29,7 @@ export default function play({ params }: { params: { id: number } }) {
 
   const url = GET_URL.NOTION_ITEM(params.id);
 
-  const handleNotionItemClick = () => (id: number) => {
+  const handleNotionItemClick = (id: number) => {
     data && addNotionItem({ id: params.id, name: data.name });
     moveNotionItemPage(id);
   };
@@ -51,7 +51,7 @@ export default function play({ params }: { params: { id: number } }) {
           notionList={data.relatedNotionList}
           handlePlusButtonClick={handlePlusButtonClick}
           handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-          handleNotionItemClick={() => handleNotionItemClick()}
+          handleNotionItemClick={handleNotionItemClick}
         />
         {bottomSheetComponent}
       </main>
