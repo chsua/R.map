@@ -33,3 +33,12 @@
    - 반응형을 사용하기 위해서 `md: w-[90%]` 이런 방식으로 className을 설정해주면 된다. 하지만 해당 방법이 적용되지 않았고, 결과적으로 명쾌하게 해답을 찾은 것은 아니지만 원인을 추론할 수는 있었다.
    - 초기 세팅을 하면서 `tailwind.config.ts` 파일에 반응형 웹 범위를 설정하는 코드를 넣었다. tailwind에서는 반응형 웹을 기본으로 지원(자체 중단점 기준을 가짐)해주고 있는데, 이를 커스텀하기 위해선 위 파일에 코드를 작성하면 되었다. 나는 이 사실을 모르고 설치를 하다가 해당 설정도 해버린 것이었다. 몇 시간을 해매다가 "혹시..." 하고 해당 코드를 지우고 다른 이런 저런 시도를 하다보니 어느새 반응형 웹이 적용되었다.
    - 때문에 원인이 커스텀 설정 때문인지는 모르겠지만 아마 맞을 것으로 추측된다...
+
+<br/>
+
+### msw + client component = error?\_#7_2023.12.06
+
+1. msw는 use Client를 사용해야 하고, async-await는 server component에서만 사용이 가능함. 때문에 이 둘을 모두 사용했더니 무한 fetch가 일어나면서 에러가 발생함.
+   - 추후 nav를 제외하고 다른 부분은 서버클라이언트로 만들 예정. 일단은 msw를 해야 하기 때문에 상세페이지 컴포넌트 전체에 async-await를 설정하는 것은 포기하고, useState를 사용해서 데이터를 관리함. 그 결과 msw를 통한 data fetch 성공.
+   - 지금은 전체 레이아웃에 msw와 context를 사용해서 client component로 사용하고 있고, 이는 하위 컴포넌트도 모두 클라이언트 컴포넌트로 사용이 됨. 추후 서버 컴포넌트를 잘 활용하기 위한 대책을 고안해야 할 듯.
+     > async/await is not yet supported in Client Components, only Server Components. This error is often caused by accidentally adding `'use client'` to a module that was originally written for the server.
