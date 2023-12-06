@@ -9,3 +9,12 @@ export interface Notion {
   description: string;
   relatedNotionList: essenceNotion[];
 }
+
+export interface RequestNotion {
+  name: string;
+  description: string;
+  isFirst: boolean;
+  relatedNotion: {
+    id: number;
+  } | null;
+}
