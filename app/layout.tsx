@@ -1,14 +1,18 @@
 'use client';
 
 import RecentlyNotionContext from '@components/context/RecentlyNotionContext';
-import './globals.css';
 import Navigation from '@components/item/Navigation';
+
+import './globals.css';
+import { turnOnMsw } from 'utils/turnOnMsw';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  turnOnMsw();
+
   return (
     <html lang="ko">
       <body>
