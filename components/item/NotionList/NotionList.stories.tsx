@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    notionList: mockNotionBanana.relatedNotionList,
+    notionList: mockNotionBanana.relatedNotions,
     handlePlusButtonClick: action('더하기 버튼 클릭 이벤트 발생'),
     handleMoreMenuButtonClick: action('노션 내 더보기 버튼 클릭 이벤트 발생'),
     handleNotionItemClick: action('노션 아이템 버튼 클릭 이벤트 발생'),

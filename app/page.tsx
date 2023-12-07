@@ -23,8 +23,8 @@ export default function Home() {
       <CircleLine amount={8} />
       <NotionList
         notionList={[
-          ...mockNotionBear.relatedNotionList,
-          ...mockNotionBanana.relatedNotionList,
+          ...mockNotionBear.relatedNotions,
+          ...mockNotionBanana.relatedNotions,
         ]}
         handlePlusButtonClick={handlePlusButtonClick}
         handleMoreMenuButtonClick={handleMoreMenuButtonClick}
