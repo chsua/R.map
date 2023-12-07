@@ -39,15 +39,12 @@ export default function NotionForm({
 
     if (!titleRef.current || !contentRef.current) return;
 
-    const submitData = {
+    const submitData: RequestNotion = {
       name: titleRef.current.value,
-      description: contentRef.current.value,
-      isFirst: !data,
-      relatedNotion: data
-        ? {
-            id: data.id,
-          }
-        : null,
+      content: contentRef.current.value,
+      relatedNotion: {
+        id: data ? data.id : null,
+      },
     };
 
     fetchWithoutGet<RequestNotion, { id: number }>(

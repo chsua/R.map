@@ -6,15 +6,14 @@ export interface essenceNotion {
 export interface Notion {
   id: number;
   name: string;
-  description: string;
-  relatedNotionList: essenceNotion[];
+  content: string;
+  relatedNotions: essenceNotion[];
 }
 
 export interface RequestNotion {
   name: string;
-  description: string;
-  isFirst: boolean;
+  content: string;
   relatedNotion: {
-    id: number;
-  } | null;
+    id: number | null;
+  };
 }
