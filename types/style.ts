@@ -1,2 +1,2 @@
 export type Size = 'sm' | 'md' | 'lg';
-export type Color = 'default' | 'blue';
+export type Color = 'default' | 'blue' | 'orange' | 'lightOrange';

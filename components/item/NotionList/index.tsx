@@ -1,23 +1,25 @@
 import NotionItem from '../NotionItem';
 import PlusNotionButton from '../PlusNotionButton';
 
-import { essenceNotion } from 'types/notion';
+import { EssenceNotion } from 'types/notion';
 
 interface NotionListProps {
-  notionList: essenceNotion[];
+  style?: string;
+  notionList: EssenceNotion[];
   handlePlusButtonClick: () => void;
   handleMoreMenuButtonClick: () => void;
   handleNotionItemClick: (id: number) => void;
 }
 
 export default function NotionList({
+  style = '',
   notionList,
   handlePlusButtonClick,
   handleMoreMenuButtonClick,
   handleNotionItemClick,
 }: NotionListProps) {
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+    <ul className={`h-fit grid grid-cols-1 gap-3 items-start ${style}`}>
       {notionList.map((item) => {
         return (
           <li key={item.name}>

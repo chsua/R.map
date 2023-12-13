@@ -21,10 +21,10 @@ export default function Navigation() {
             홈페이지
           </button>
         </RoundSquare>
-        {recentlyNotionList.map(({ id, name }) => {
+        {recentlyNotionList.map(({ id, name, color }) => {
           return (
             <Fragment key={id}>
-              <RoundSquare size="free">
+              <RoundSquare size="free" color={color}>
                 <button
                   className="w-max min-w-[80px] h-[30px] pl-2 pr-2"
                   onClick={() => moveNotionItemPage(id)}

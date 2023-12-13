@@ -18,7 +18,7 @@ import { Notion } from 'types/notion';
 export default function notion({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
 
-  const { addNotionItem } = useRecentlyNotionContext();
+  const { updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
 
   //현재는 수정기능이 없으므로 "make"로 설정
@@ -31,7 +31,6 @@ export default function notion({ params }: { params: { id: number } }) {
   const url = GET_URL.NOTION_ITEM(params.id);
 
   const handleNotionItemClick = (id: number) => {
-    data && addNotionItem({ id: params.id, name: data.name });
     moveNotionItemPage(id);
   };
 
@@ -39,15 +38,22 @@ export default function notion({ params }: { params: { id: number } }) {
     (async () => {
       const data = await getFetch<Notion>(url);
       setData(data);
+      updateRecentlyNotionList(
+        { id: data.id, name: data.name },
+        data.id,
+        data.relatedNotions,
+      );
     })();
   }, []);
 
   return (
     data && (
-      <main className="flex flex-col gap-5">
-        <Title content={data.name} />
-        <CircleLine amount={8} />
-        <Description content={data.content} />
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="flex flex-col gap-5">
+          <Title content={data.name} />
+          <CircleLine amount={8} />
+          <Description content={data.content} />
+        </div>
         <NotionList
           notionList={data.relatedNotions}
           handlePlusButtonClick={handlePlusButtonClick}
