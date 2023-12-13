@@ -18,7 +18,7 @@ import { Notion } from 'types/notion';
 export default function notion({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
 
-  const { addNotionItem } = useRecentlyNotionContext();
+  const { updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
 
   //현재는 수정기능이 없으므로 "make"로 설정
@@ -38,7 +38,11 @@ export default function notion({ params }: { params: { id: number } }) {
     (async () => {
       const data = await getFetch<Notion>(url);
       setData(data);
-      addNotionItem({ id: params.id, name: data.name });
+      updateRecentlyNotionList(
+        { id: data.id, name: data.name },
+        data.id,
+        data.relatedNotions,
+      );
     })();
   }, []);
 
