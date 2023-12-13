@@ -44,10 +44,12 @@ export default function notion({ params }: { params: { id: number } }) {
 
   return (
     data && (
-      <main className="flex flex-col gap-5">
-        <Title content={data.name} />
-        <CircleLine amount={8} />
-        <Description content={data.content} />
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="flex flex-col gap-5">
+          <Title content={data.name} />
+          <CircleLine amount={8} />
+          <Description content={data.content} />
+        </div>
         <NotionList
           notionList={data.relatedNotions}
           handlePlusButtonClick={handlePlusButtonClick}

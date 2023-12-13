@@ -22,6 +22,7 @@ export default function Home() {
       <Title content="개념" />
       <CircleLine amount={8} />
       <NotionList
+        style="md:grid-cols-2 lg:grid-cols-3"
         notionList={[
           ...mockNotionBear.relatedNotions,
           ...mockNotionBanana.relatedNotions,
