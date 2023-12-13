@@ -1,4 +1,4 @@
-export interface essenceNotion {
+export interface EssenceNotion {
   id: number;
   name: string;
 }
@@ -7,7 +7,7 @@ export interface Notion {
   id: number;
   name: string;
   content: string;
-  relatedNotions: essenceNotion[];
+  relatedNotions: EssenceNotion[];
 }
 
 export interface RequestNotion {

@@ -1,16 +1,17 @@
 import { createContext, useContext, useState } from 'react';
-import { essenceNotion } from 'types/notion';
+import { EssenceNotion } from 'types/notion';
 
+interface ContextNotionInfo extends EssenceNotion {}
 interface RecentlyNotionContextProps {
-  recentlyNotionList: essenceNotion[];
-  addNotionItem: (notion: essenceNotion) => void;
+  recentlyNotionList: EssenceNotion[];
+  addNotionItem: (notion: EssenceNotion) => void;
 }
 
 const limitCount = 7;
 
 export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
   recentlyNotionList: [],
-  addNotionItem: (notion: essenceNotion) => {},
+  addNotionItem: (notion: EssenceNotion) => {},
 });
 
 export default function RecentlyNotionContext({
@@ -18,11 +19,11 @@ export default function RecentlyNotionContext({
 }: {
   children: React.ReactNode;
 }) {
-  const [recentlyNotionList, setRecentlyNotionList] = useState<essenceNotion[]>(
+  const [recentlyNotionList, setRecentlyNotionList] = useState<EssenceNotion[]>(
     [],
   );
 
-  const addNotionItem = (notion: essenceNotion) => {
+  const addNotionItem = (notion: EssenceNotion) => {
     const notOverlapList = recentlyNotionList.filter(
       ({ id }) => id !== notion.id,
     );
@@ -34,6 +35,11 @@ export default function RecentlyNotionContext({
 
     setRecentlyNotionList([...newList, notion]);
   };
+
+  const checkNotionRelation = (
+    nowNotionId: number,
+    relationNotionList: EssenceNotion[],
+  ) => {};
 
   return (
     <recentlyNotionContext.Provider

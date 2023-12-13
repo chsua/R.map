@@ -1,11 +1,11 @@
 import NotionItem from '../NotionItem';
 import PlusNotionButton from '../PlusNotionButton';
 
-import { essenceNotion } from 'types/notion';
+import { EssenceNotion } from 'types/notion';
 
 interface NotionListProps {
   style?: string;
-  notionList: essenceNotion[];
+  notionList: EssenceNotion[];
   handlePlusButtonClick: () => void;
   handleMoreMenuButtonClick: () => void;
   handleNotionItemClick: (id: number) => void;
