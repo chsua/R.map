@@ -1,5 +1,7 @@
+'use client';
+
 import { useKeyEscClose } from 'hooks/useKeyEscClose';
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Size } from 'types/style';
 
 interface BottomSheetProps {
@@ -14,12 +16,21 @@ const heightStyle: Record<Size, string> = {
   lg: 'min-h-[60%]',
 };
 
+const animation = {
+  open: 'animate-[bottomUp_0.35s_ease-in-out_forwards]',
+  close: 'animate-[bottomDown_0.35s_ease-in-out_forwards]',
+  fadeIn: 'animate-[fadeIn_0.35s_ease-in-out_forwards]',
+  fadeOut: 'animate-[fadeOut_0.35s_ease-in-out_forwards]',
+};
+
 export default function BottomSheet({
   children,
   size = 'md',
   closeEvent,
 }: BottomSheetProps) {
+  const [isOpen, setIsOpen] = useState(true);
   const closeModalKeyboardEvent = useKeyEscClose(closeEvent);
+  let timeId = 0;
 
   const closeModalClickEvent: MouseEventHandler<
     HTMLDivElement | HTMLButtonElement
@@ -29,14 +40,25 @@ export default function BottomSheet({
     if (
       target.id === 'bottom-sheet-backdrop' ||
       target.id === 'bottom-sheet-close-button'
-    )
-      closeEvent();
+    ) {
+      setIsOpen(false);
+
+      timeId = window.setTimeout(() => {
+        closeEvent();
+      }, 350);
+    }
   };
+
+  useEffect(() => {
+    return () => clearTimeout(timeId);
+  }, []);
 
   return (
     <div
       id="bottom-sheet-backdrop"
-      className="fixed inset-0 bg-black/30 z-10 flex justify-center items-end"
+      className={`fixed inset-0 bg-black/30 z-10 flex justify-center items-end ${
+        isOpen ? animation.fadeIn : animation.fadeOut
+      }`}
       onClick={closeModalClickEvent}
       onKeyUp={() => closeModalKeyboardEvent}
       aria-label="모달"
@@ -49,7 +71,11 @@ export default function BottomSheet({
       <div
         role="region"
         aria-label="모달 내 컨텐츠"
-        className={`bg-white z-20 flex justify-center items-center flex-col ${heightStyle[size]} w-full max-w-[1000px] rounded-t-lg`}
+        className={`bg-white z-20 flex justify-center items-center flex-col ${
+          heightStyle[size]
+        } w-full max-w-[1000px] rounded-t-lg ${
+          isOpen ? animation.open : animation.close
+        }`}
       >
         {children}
       </div>

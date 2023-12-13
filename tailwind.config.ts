@@ -13,6 +13,30 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      keyframes: {
+        bottomUp: {
+          '100%': { transform: 'none' },
+          '0%': { transform: 'translateY(100%)' },
+        },
+        bottomDown: {
+          '0%': { transform: 'none' },
+          '100%': { transform: 'translateY(100%)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+      },
+      animation: {
+        bottomUp: 'bottomUp 0.35s ease-in-out forwards',
+        bottomDown: 'bottomDown 0.35s ease-in-out forwards',
+        fadeIn: 'fadeIn 0.35s ease-in-out forwards',
+        fadeOut: 'fadeOut 0.35s ease-in-out forwards',
+      },
     },
   },
   plugins: [],
