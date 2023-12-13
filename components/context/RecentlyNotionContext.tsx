@@ -6,6 +6,8 @@ interface RecentlyNotionContextProps {
   addNotionItem: (notion: essenceNotion) => void;
 }
 
+const limitCount = 7;
+
 export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
   recentlyNotionList: [],
   addNotionItem: (notion: essenceNotion) => {},
@@ -26,8 +28,8 @@ export default function RecentlyNotionContext({
     );
 
     const newList =
-      notOverlapList.length > 4
-        ? notOverlapList.slice(notOverlapList.length - 4)
+      notOverlapList.length > limitCount
+        ? notOverlapList.slice(notOverlapList.length - limitCount)
         : notOverlapList;
 
     setRecentlyNotionList([...newList, notion]);

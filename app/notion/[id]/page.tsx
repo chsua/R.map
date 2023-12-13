@@ -31,7 +31,6 @@ export default function notion({ params }: { params: { id: number } }) {
   const url = GET_URL.NOTION_ITEM(params.id);
 
   const handleNotionItemClick = (id: number) => {
-    data && addNotionItem({ id: params.id, name: data.name });
     moveNotionItemPage(id);
   };
 
@@ -39,6 +38,7 @@ export default function notion({ params }: { params: { id: number } }) {
     (async () => {
       const data = await getFetch<Notion>(url);
       setData(data);
+      addNotionItem({ id: params.id, name: data.name });
     })();
   }, []);
 
