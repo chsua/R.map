@@ -26,7 +26,7 @@ export default function Home() {
     sideEffectFn: () => setTrigger(!trigger),
   });
 
-  const { moveNotionItemPage } = useMovePage();
+  const { moveNotionGraphItemListPage } = useMovePage();
 
   useEffect(() => {
     (async () => {
@@ -45,7 +45,7 @@ export default function Home() {
           notionList={data}
           handlePlusButtonClick={handlePlusButtonClick}
           handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-          handleNotionItemClick={moveNotionItemPage}
+          handleNotionItemClick={moveNotionGraphItemListPage}
         />
         {bottomSheetComponent}
       </main>
