@@ -6,10 +6,15 @@ import { Notion } from 'types/notion';
 
 type Content = 'notionItemForm' | 'notionItemPlusMenu';
 
-export const useNotionItemBottomSheet = (
-  type: 'make' | 'edit',
-  notion?: Notion,
-) => {
+export const useNotionItemBottomSheet = ({
+  type,
+  notion,
+  sideEffectFn,
+}: {
+  type: 'make' | 'edit';
+  notion?: Notion;
+  sideEffectFn?: () => void;
+}) => {
   const [bottomSheetContent, setBottomSheetContent] = useState<Content | null>(
     null,
   );
@@ -18,13 +23,14 @@ export const useNotionItemBottomSheet = (
     setBottomSheetContent(null);
   };
 
+  const submitSideEffect = () => {
+    sideEffectFn && sideEffectFn();
+    setBottomSheetContent(null);
+  };
+
   const content: Record<Content, ReactNode> = {
     notionItemForm: (
-      <NotionForm
-        type={type}
-        data={notion}
-        submitEvent={resetBottomSheetContent}
-      />
+      <NotionForm type={type} data={notion} submitEvent={submitSideEffect} />
     ),
     notionItemPlusMenu: <></>,
   };

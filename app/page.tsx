@@ -15,12 +15,16 @@ import { GET_URL } from 'constants/url';
 
 export default function Home() {
   const [data, setData] = useState<EssenceNotion[]>();
+  const [trigger, setTrigger] = useState(false);
 
   const {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
     bottomSheetComponent,
-  } = useNotionItemBottomSheet('make');
+  } = useNotionItemBottomSheet({
+    type: 'make',
+    sideEffectFn: () => setTrigger(!trigger),
+  });
 
   const { moveNotionItemPage } = useMovePage();
 
@@ -29,7 +33,7 @@ export default function Home() {
       const data = await getFetch<EssenceNotion[]>(GET_URL.NOTION_GRAPH_LIST());
       setData(data);
     })();
-  }, []);
+  }, [trigger]);
 
   return (
     data && (
