@@ -8,10 +8,15 @@ export const useMovePage = () => {
     router.push(`/`, { scroll: true });
   };
 
+  const moveNotionGraphItemListPage = (id: number, callback?: () => void) => {
+    callback && callback();
+    router.push(`/graph/${id}`, { scroll: true });
+  };
+
   const moveNotionItemPage = (id: number, callback?: () => void) => {
     callback && callback();
     router.push(`/notion/${id}`, { scroll: true });
   };
 
-  return { moveMainPage, moveNotionItemPage };
+  return { moveMainPage, moveNotionGraphItemListPage, moveNotionItemPage };
 };

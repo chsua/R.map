@@ -7,7 +7,7 @@ import RoundSquare from '../../common/RoundSquare';
 interface NotionItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string;
   handleNotionItemClick: () => void;
-  handleMoreMenuButtonClick: () => void;
+  handleMoreMenuButtonClick?: () => void;
 }
 
 export default function NotionItem({
@@ -19,7 +19,7 @@ export default function NotionItem({
     HTMLButtonElement
   > = (event) => {
     event.stopPropagation();
-    handleMoreMenuButtonClick();
+    handleMoreMenuButtonClick && handleMoreMenuButtonClick();
   };
 
   return (
@@ -30,10 +30,12 @@ export default function NotionItem({
       >
         <CircleLine amount={1} />
         <button className="w-full truncate text-left">{content}</button>
-        <MoreMenuButton
-          size="sm"
-          onClick={handleMoreNotionButtonClickWithoutBubbling}
-        />
+        {handleMoreMenuButtonClick && (
+          <MoreMenuButton
+            size="sm"
+            onClick={handleMoreNotionButtonClickWithoutBubbling}
+          />
+        )}
       </div>
     </RoundSquare>
   );

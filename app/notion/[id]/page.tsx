@@ -17,6 +17,7 @@ import { Notion } from 'types/notion';
 
 export default function notion({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
+  const [trigger, setTrigger] = useState(false);
 
   const { updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
@@ -26,7 +27,11 @@ export default function notion({ params }: { params: { id: number } }) {
     handlePlusButtonClick,
     handleMoreMenuButtonClick,
     bottomSheetComponent,
-  } = useNotionItemBottomSheet('make', data);
+  } = useNotionItemBottomSheet({
+    type: 'make',
+    notion: data,
+    sideEffectFn: () => setTrigger(!trigger),
+  });
 
   const url = GET_URL.NOTION_ITEM(params.id);
 
@@ -44,7 +49,7 @@ export default function notion({ params }: { params: { id: number } }) {
         data.relatedNotions,
       );
     })();
-  }, []);
+  }, [trigger]);
 
   return (
     data && (
@@ -52,7 +57,9 @@ export default function notion({ params }: { params: { id: number } }) {
         <div className="flex flex-col gap-5">
           <Title content={data.name} />
           <CircleLine amount={8} />
-          <Description content={data.content} />
+          <div className="min-h-[150px]">
+            <Description content={data.content} />
+          </div>
         </div>
         <NotionList
           notionList={data.relatedNotions}
