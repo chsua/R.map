@@ -6,8 +6,8 @@ import { EssenceNotion } from 'types/notion';
 interface NotionListProps {
   style?: string;
   notionList: EssenceNotion[];
-  handlePlusButtonClick: () => void;
-  handleMoreMenuButtonClick: () => void;
+  handlePlusButtonClick?: () => void;
+  handleMoreMenuButtonClick?: () => void;
   handleNotionItemClick: (id: number) => void;
 }
 
@@ -31,9 +31,11 @@ export default function NotionList({
           </li>
         );
       })}
-      <li>
-        <PlusNotionButton onClick={handlePlusButtonClick} />
-      </li>
+      {handlePlusButtonClick && (
+        <li>
+          <PlusNotionButton onClick={handlePlusButtonClick} />
+        </li>
+      )}
     </ul>
   );
 }
