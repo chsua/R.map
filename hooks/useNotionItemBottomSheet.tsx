@@ -30,7 +30,7 @@ export const useNotionItemBottomSheet = ({
 
   const content: Record<Content, ReactNode> = {
     notionItemForm: (
-      <NotionForm type={type} data={notion} submitEvent={submitSideEffect} />
+      <NotionForm type={type} data={notion} subEvent={submitSideEffect} />
     ),
     notionItemPlusMenu: <></>,
   };

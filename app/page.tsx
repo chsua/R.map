@@ -6,7 +6,6 @@ import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 
-import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
 import { EssenceNotion } from 'types/notion';
@@ -15,17 +14,6 @@ import { GET_URL } from 'constants/url';
 
 export default function Home() {
   const [data, setData] = useState<EssenceNotion[]>();
-  const [trigger, setTrigger] = useState(false);
-
-  const {
-    handlePlusButtonClick,
-    handleMoreMenuButtonClick,
-    bottomSheetComponent,
-  } = useNotionItemBottomSheet({
-    type: 'make',
-    sideEffectFn: () => setTrigger(!trigger),
-  });
-
   const { moveNotionFolderItemListPage } = useMovePage();
 
   useEffect(() => {
@@ -36,7 +24,7 @@ export default function Home() {
 
       setData(data);
     })();
-  }, [trigger]);
+  }, []);
 
   return (
     data && (
@@ -46,11 +34,8 @@ export default function Home() {
         <NotionList
           style="md:grid-cols-2 lg:grid-cols-3"
           notionList={data}
-          handlePlusButtonClick={handlePlusButtonClick}
-          handleMoreMenuButtonClick={handleMoreMenuButtonClick}
           handleNotionItemClick={moveNotionFolderItemListPage}
         />
-        {bottomSheetComponent}
       </main>
     )
   );

@@ -8,7 +8,6 @@ import Description from '@components/common/Description';
 import Title from '@components/common/Title';
 import NotionList from '@components/item/NotionList';
 
-import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
@@ -17,21 +16,9 @@ import { Notion } from 'types/notion';
 
 export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
-  const [trigger, setTrigger] = useState(false);
 
   const { updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
-
-  //현재는 수정기능이 없으므로 "make"로 설정
-  const {
-    handlePlusButtonClick,
-    handleMoreMenuButtonClick,
-    bottomSheetComponent,
-  } = useNotionItemBottomSheet({
-    type: 'make',
-    notion: data,
-    sideEffectFn: () => setTrigger(!trigger),
-  });
 
   const url = GET_URL.NOTION_ITEM(params.id);
 
@@ -49,7 +36,7 @@ export default function Page({ params }: { params: { id: number } }) {
         data.relatedNotions,
       );
     })();
-  }, [trigger]);
+  }, []);
 
   return (
     data && (
@@ -63,11 +50,8 @@ export default function Page({ params }: { params: { id: number } }) {
         </div>
         <NotionList
           notionList={data.relatedNotions}
-          handlePlusButtonClick={handlePlusButtonClick}
-          handleMoreMenuButtonClick={handleMoreMenuButtonClick}
           handleNotionItemClick={handleNotionItemClick}
         />
-        {bottomSheetComponent}
       </main>
     )
   );

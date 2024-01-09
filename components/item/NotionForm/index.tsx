@@ -2,7 +2,6 @@
 
 import RoundSquare from '@components/common/RoundSquare';
 import { POST_URL } from 'constants/url';
-import { useMovePage } from 'hooks/useMovePage';
 import React, { FormEventHandler, LegacyRef, useRef } from 'react';
 import { Notion, RequestNotion } from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
@@ -10,7 +9,7 @@ import { fetchWithoutGet } from 'utils/fetch';
 interface NotionFormProps {
   type: 'make' | 'edit';
   data?: Notion;
-  submitEvent?: () => void;
+  subEvent?: () => void;
 }
 
 /**
@@ -26,14 +25,9 @@ interface NotionFormProps {
  *    - 노션 생성 : 현재 노션 id
  * 2. 노션 수정 : 핸재 노션 모든 정보
  */
-export default function NotionForm({
-  type,
-  data,
-  submitEvent,
-}: NotionFormProps) {
+export default function NotionForm({ type, data, subEvent }: NotionFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
-  const { moveNotionItemPage } = useMovePage();
   const submitNotionItem: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
@@ -54,8 +48,7 @@ export default function NotionForm({
     )
       .then((res) => {
         console.log(res.id);
-        // 실제 서버에서는 활성화 moveNotionItemPage(res.id);
-        submitEvent && submitEvent();
+        subEvent && subEvent();
       })
       .catch(() => {
         alert('개념 추가가 실패했습니다. 다시 확인해주세요.');
