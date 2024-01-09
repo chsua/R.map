@@ -15,7 +15,7 @@ import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
 import { Notion } from 'types/notion';
 
-export default function notion({ params }: { params: { id: number } }) {
+export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
   const [trigger, setTrigger] = useState(false);
 

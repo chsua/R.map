@@ -26,11 +26,14 @@ export default function Home() {
     sideEffectFn: () => setTrigger(!trigger),
   });
 
-  const { moveNotionGraphItemListPage } = useMovePage();
+  const { moveNotionFolderItemListPage } = useMovePage();
 
   useEffect(() => {
     (async () => {
-      const data = await getFetch<EssenceNotion[]>(GET_URL.NOTION_GRAPH_LIST());
+      const data = await getFetch<EssenceNotion[]>(
+        GET_URL.NOTION_FOLDER_LIST(),
+      );
+
       setData(data);
     })();
   }, [trigger]);
@@ -45,7 +48,7 @@ export default function Home() {
           notionList={data}
           handlePlusButtonClick={handlePlusButtonClick}
           handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-          handleNotionItemClick={moveNotionGraphItemListPage}
+          handleNotionItemClick={moveNotionFolderItemListPage}
         />
         {bottomSheetComponent}
       </main>

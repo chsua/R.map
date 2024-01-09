@@ -12,12 +12,12 @@ import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
 import { EssenceNotion } from 'types/notion';
 
-export default function notion({ params }: { params: { id: number } }) {
+export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<EssenceNotion[]>();
 
   const { moveNotionItemPage } = useMovePage();
 
-  const url = GET_URL.NOTION_GRAPH_ITEM_LIST(params.id);
+  const url = GET_URL.NOTION_LIST_IN_FOLDER(params.id);
 
   const handleNotionItemClick = (id: number) => {
     moveNotionItemPage(id);
