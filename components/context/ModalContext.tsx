@@ -38,7 +38,7 @@ export default function ModalContext({ children }: { children: ReactNode }) {
     <modalContext.Provider value={{ addModal, deleteModal }}>
       {children}
       {[...modalList.entries()].map(([id, element]) => (
-        <Fragment>{element}</Fragment>
+        <Fragment key={id}>{element}</Fragment>
       ))}
     </modalContext.Provider>
   );
