@@ -40,7 +40,6 @@ export default function Home() {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <NotionForm
-          type="make"
           subEvent={() => {
             setTrigger((trigger) => trigger + 1);
             exitSubmitButtonBottomSheet();
