@@ -13,9 +13,15 @@ import { useMovePage } from 'hooks/useMovePage';
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
 import { Notion } from 'types/notion';
+import NotionItem from '@components/item/NotionItem';
+import PlusNotionButton from '@components/item/PlusNotionButton';
+import { useModal } from 'hooks/useModal';
+import BottomSheet from '@components/common/BottomSheet';
+import NotionForm from '@components/item/NotionForm';
 
 export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
+  const [trigger, setTrigger] = useState(0);
 
   const { updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
@@ -24,6 +30,34 @@ export default function Page({ params }: { params: { id: number } }) {
 
   const handleNotionItemClick = (id: number) => {
     moveNotionItemPage(id);
+  };
+
+  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
+    useModal();
+  const openBottomSheetForNotion = () => {
+    openMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet closeEvent={() => exitMoreButtonBottomSheet()}>
+        여기에 노션 정보
+      </BottomSheet>
+    ));
+  };
+
+  const {
+    open: openSubmitButtonBottomSheet,
+    exit: exitSubmitButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForNotionSubmit = () => {
+    openSubmitButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
+        <NotionForm
+          type="make"
+          subEvent={() => {
+            setTrigger((trigger) => trigger + 1);
+            exitSubmitButtonBottomSheet();
+          }}
+        />
+      </BottomSheet>
+    ));
   };
 
   useEffect(() => {
@@ -36,7 +70,7 @@ export default function Page({ params }: { params: { id: number } }) {
         data.relatedNotions,
       );
     })();
-  }, []);
+  }, [trigger]);
 
   return (
     data && (
@@ -48,10 +82,22 @@ export default function Page({ params }: { params: { id: number } }) {
             <Description content={data.content} />
           </div>
         </div>
-        <NotionList
-          notionList={data.relatedNotions}
-          handleNotionItemClick={handleNotionItemClick}
-        />
+        <NotionList>
+          {data.relatedNotions.map((item) => {
+            return (
+              <li key={item.name}>
+                <NotionItem
+                  content={item.name}
+                  handleMoreMenuButtonClick={openBottomSheetForNotion}
+                  handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                />
+              </li>
+            );
+          })}
+          <li>
+            <PlusNotionButton onClick={openBottomSheetForNotionSubmit} />
+          </li>
+        </NotionList>
       </main>
     )
   );
