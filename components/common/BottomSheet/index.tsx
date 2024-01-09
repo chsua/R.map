@@ -6,14 +6,15 @@ import { Size } from 'types/style';
 
 interface BottomSheetProps {
   children?: ReactNode;
-  size?: Size;
+  size?: Size | 'free';
   closeEvent: () => void;
 }
 
-const heightStyle: Record<Size, string> = {
+const heightStyle: Record<Size | 'free', string> = {
   sm: 'min-h-[40%]',
   md: 'min-h-[50%]',
   lg: 'min-h-[60%]',
+  free: 'min-h-fit',
 };
 
 const animation = {

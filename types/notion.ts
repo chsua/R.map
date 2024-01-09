@@ -17,3 +17,7 @@ export interface RequestNotion {
     id: number | null;
   };
 }
+
+export interface RequestNotionFolder {
+  name: string;
+}

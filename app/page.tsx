@@ -12,10 +12,11 @@ import { EssenceNotion } from 'types/notion';
 import { getFetch } from 'utils/fetch';
 import { GET_URL } from 'constants/url';
 import { useModal } from 'hooks/useModal';
+
 import BottomSheet from '@components/common/BottomSheet';
-import NotionForm from '@components/item/NotionForm';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
+import FolderForm from '@components/item/FolderForm';
 
 export default function Home() {
   const [data, setData] = useState<EssenceNotion[]>();
@@ -38,13 +39,15 @@ export default function Home() {
   } = useModal();
   const openBottomSheetForNotionSubmit = () => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
-      <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
-        <NotionForm
-          subEvent={() => {
-            setTrigger((trigger) => trigger + 1);
-            exitSubmitButtonBottomSheet();
-          }}
-        />
+      <BottomSheet size="free" closeEvent={() => exitSubmitButtonBottomSheet()}>
+        <div className="py-5 w-full">
+          <FolderForm
+            subEvent={() => {
+              setTrigger((trigger) => trigger + 1);
+              exitSubmitButtonBottomSheet();
+            }}
+          />
+        </div>
       </BottomSheet>
     ));
   };
