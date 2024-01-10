@@ -21,8 +21,8 @@ interface NotionFormProps {
  * 2. 노션 수정
  */
 export default function NotionForm({ data, subEvent }: NotionFormProps) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState(data ? data.name : '');
+  const [content, setContent] = useState(data ? data.content : '');
 
   const submitNotionItem: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
