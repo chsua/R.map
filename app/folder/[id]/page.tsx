@@ -10,15 +10,16 @@ import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
-import { NotionFolder } from 'types/notion';
+import { Notion } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
 import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
+import NotionInfo from '@components/item/NotionInfo';
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [data, setData] = useState<NotionFolder[]>();
+  const [data, setData] = useState<Notion[]>();
   const [trigger, setTrigger] = useState(0);
 
   const { moveNotionItemPage } = useMovePage();
@@ -29,24 +30,15 @@ export default function Page({ params }: { params: { id: number } }) {
     moveNotionItemPage(id);
   };
 
-  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
-    useModal();
-  const openBottomSheetForNotion = () => {
-    openMoreButtonBottomSheet(({ isOpen, close }) => (
-      <BottomSheet closeEvent={() => exitMoreButtonBottomSheet()}>
-        여기에 노션 정보
-      </BottomSheet>
-    ));
-  };
-
   const {
     open: openSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotionSubmit = () => {
+  const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <NotionForm
+          data={notion}
           subEvent={() => {
             setTrigger((trigger) => trigger + 1);
             exitSubmitButtonBottomSheet();
@@ -56,9 +48,27 @@ export default function Page({ params }: { params: { id: number } }) {
     ));
   };
 
+  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
+    useModal();
+  const openBottomSheetForNotion = (notion: Notion) => {
+    openMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
+        <div className="py-7 w-full">
+          <NotionInfo
+            notion={notion}
+            handleNotionItemClick={() => {
+              exitMoreButtonBottomSheet();
+              openBottomSheetForNotionSubmit(notion);
+            }}
+          />
+        </div>
+      </BottomSheet>
+    ));
+  };
+
   useEffect(() => {
     (async () => {
-      const data = await getFetch<NotionFolder[]>(url);
+      const data = await getFetch<Notion[]>(url);
       setData(data);
     })();
   }, [trigger]);
@@ -74,14 +84,18 @@ export default function Page({ params }: { params: { id: number } }) {
               <li key={item.name}>
                 <NotionItem
                   content={item.name}
-                  handleMoreMenuButtonClick={openBottomSheetForNotion}
+                  handleMoreMenuButtonClick={() =>
+                    openBottomSheetForNotion(item)
+                  }
                   handleNotionItemClick={() => handleNotionItemClick(item.id)}
                 />
               </li>
             );
           })}
           <li>
-            <PlusNotionButton onClick={openBottomSheetForNotionSubmit} />
+            <PlusNotionButton
+              onClick={() => openBottomSheetForNotionSubmit()}
+            />
           </li>
         </NotionList>
       </main>
