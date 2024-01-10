@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { GET_URL, POST_URL } from 'constants/url';
+import { DELETE_URL, GET_URL, POST_URL } from 'constants/url';
 import { mockNotionFolder } from './mockData/notionFolder';
 
 export const notionFolder = [
@@ -9,6 +9,10 @@ export const notionFolder = [
 
   rest.post(POST_URL.NOTION_FOLDER_MOCK(), (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ id: 1 }));
+  }),
+
+  rest.delete(DELETE_URL.NOTION_FOLDER_MOCK(), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
   }),
 ];
 

@@ -18,6 +18,7 @@ import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
+import { deleteNotionFolder } from 'utils/deleteNotion';
 
 export default function Home() {
   const [data, setData] = useState<NotionFolder[]>();
@@ -51,17 +52,34 @@ export default function Home() {
     close: closeMoreButtonBottomSheet,
     exit: exitMoreButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotion = (notion: NotionFolder) => {
+  const openBottomSheetForNotion = (notionFolder: NotionFolder) => {
     openMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
-          <NotionInfo
-            notion={notion}
-            handleNotionItemClick={() => {
-              exitMoreButtonBottomSheet();
-              openBottomSheetForNotionSubmit(notion);
-            }}
-          />
+          <NotionInfo notion={notionFolder}>
+            <button
+              className="flex gap-3 items-center text-sm"
+              onClick={() => {
+                exitMoreButtonBottomSheet();
+                openBottomSheetForNotionSubmit(notionFolder);
+              }}
+            >
+              <CircleLine amount={1} />
+              <span>이름 수정하기</span>
+            </button>
+            <button
+              className="flex gap-3 items-center text-sm"
+              onClick={() => {
+                deleteNotionFolder(notionFolder.id, () => {
+                  exitMoreButtonBottomSheet();
+                  setTrigger((trigger) => trigger + 1);
+                });
+              }}
+            >
+              <CircleLine amount={1} />
+              <span>폴더 삭제하기</span>
+            </button>
+          </NotionInfo>
         </div>
       </BottomSheet>
     ));

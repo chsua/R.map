@@ -20,6 +20,6 @@ export const POST_URL = {
 export const DELETE_URL = {
   NOTION_ITEM_MOCK: () => `/notions/:id`,
   NOTION_ITEM: (id: number) => `${base}/notions/${id}`,
-  // NOTION_FOLDER_MOCK: () => `/notion-folders`,
-  // NOTION_FOLDER: () => `${base}/notion-folders`,
+  NOTION_FOLDER_MOCK: () => `/notion-folders/:id`,
+  NOTION_FOLDER: (id: number) => `${base}/notion-folders/${id}`,
 };
