@@ -7,11 +7,16 @@ export interface RequestNotionFolder {
   name: string;
 }
 
+export interface RelatedNotion {
+  id: number;
+  name: string;
+}
+
 export interface Notion {
   id: number;
   name: string;
   content: string;
-  relatedNotions: NotionFolder[];
+  relatedNotions: RelatedNotion[];
 }
 
 export interface RequestNotion {
