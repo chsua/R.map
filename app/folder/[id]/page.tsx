@@ -10,7 +10,7 @@ import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
-import { EssenceNotion } from 'types/notion';
+import { NotionFolder } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
@@ -18,7 +18,7 @@ import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [data, setData] = useState<EssenceNotion[]>();
+  const [data, setData] = useState<NotionFolder[]>();
   const [trigger, setTrigger] = useState(0);
 
   const { moveNotionItemPage } = useMovePage();
@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
   useEffect(() => {
     (async () => {
-      const data = await getFetch<EssenceNotion[]>(url);
+      const data = await getFetch<NotionFolder[]>(url);
       setData(data);
     })();
   }, [trigger]);

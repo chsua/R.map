@@ -8,7 +8,7 @@ import CircleLine from '@components/common/CircleLine';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-import { EssenceNotion } from 'types/notion';
+import { NotionFolder } from 'types/notion';
 import { getFetch } from 'utils/fetch';
 import { GET_URL } from 'constants/url';
 import { useModal } from 'hooks/useModal';
@@ -17,31 +17,24 @@ import BottomSheet from '@components/common/BottomSheet';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import FolderForm from '@components/item/FolderForm';
+import NotionInfo from '@components/item/NotionInfo';
 
 export default function Home() {
-  const [data, setData] = useState<EssenceNotion[]>();
+  const [data, setData] = useState<NotionFolder[]>();
   const [trigger, setTrigger] = useState(0);
   const { moveNotionFolderItemListPage } = useMovePage();
 
-  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
-    useModal();
-  const openBottomSheetForNotion = () => {
-    openMoreButtonBottomSheet(({ isOpen, close }) => (
-      <BottomSheet closeEvent={() => exitMoreButtonBottomSheet()}>
-        여기에 노션 정보
-      </BottomSheet>
-    ));
-  };
-
   const {
     open: openSubmitButtonBottomSheet,
+    close: closeSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotionSubmit = () => {
+  const openBottomSheetForNotionSubmit = (notionFolder?: NotionFolder) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitSubmitButtonBottomSheet()}>
-        <div className="py-5 w-full">
+        <div className="py-7 w-full">
           <FolderForm
+            data={notionFolder}
             subEvent={() => {
               setTrigger((trigger) => trigger + 1);
               exitSubmitButtonBottomSheet();
@@ -52,11 +45,31 @@ export default function Home() {
     ));
   };
 
+  //현재 exit로 해서 페이드 아웃 애니메이션 적용 안됨
+  const {
+    open: openMoreButtonBottomSheet,
+    close: closeMoreButtonBottomSheet,
+    exit: exitMoreButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForNotion = (notion: NotionFolder) => {
+    openMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
+        <div className="py-7 w-full">
+          <NotionInfo
+            notion={notion}
+            handleNotionItemClick={() => {
+              exitMoreButtonBottomSheet();
+              openBottomSheetForNotionSubmit(notion);
+            }}
+          />
+        </div>
+      </BottomSheet>
+    ));
+  };
+
   useEffect(() => {
     (async () => {
-      const data = await getFetch<EssenceNotion[]>(
-        GET_URL.NOTION_FOLDER_LIST(),
-      );
+      const data = await getFetch<NotionFolder[]>(GET_URL.NOTION_FOLDER_LIST());
 
       setData(data);
     })();
@@ -73,7 +86,9 @@ export default function Home() {
               <li key={item.name}>
                 <NotionItem
                   content={item.name}
-                  handleMoreMenuButtonClick={openBottomSheetForNotion}
+                  handleMoreMenuButtonClick={() =>
+                    openBottomSheetForNotion(item)
+                  }
                   handleNotionItemClick={() =>
                     moveNotionFolderItemListPage(item.id)
                   }
@@ -82,7 +97,9 @@ export default function Home() {
             );
           })}
           <li>
-            <PlusNotionButton onClick={openBottomSheetForNotionSubmit} />
+            <PlusNotionButton
+              onClick={() => openBottomSheetForNotionSubmit()}
+            />
           </li>
         </NotionList>
       </main>

@@ -4,11 +4,16 @@ import RoundSquare from '@components/common/RoundSquare';
 import { NOTION_TITLE_AMOUNT } from 'constants/amountLimit';
 import { POST_URL } from 'constants/url';
 import React, { FormEventHandler, useState } from 'react';
-import { Notion, RequestNotion, RequestNotionFolder } from 'types/notion';
+import {
+  NotionFolder,
+  Notion,
+  RequestNotion,
+  RequestNotionFolder,
+} from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
 
 interface FolderFormProps {
-  data?: Notion;
+  data?: NotionFolder;
   subEvent?: () => void;
 }
 
@@ -18,7 +23,7 @@ interface FolderFormProps {
  * 2. 폴더 수정
  */
 export default function FolderForm({ data, subEvent }: FolderFormProps) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(data ? data.name : '');
 
   const submitNotionItem: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -29,6 +34,7 @@ export default function FolderForm({ data, subEvent }: FolderFormProps) {
       name: title,
     };
 
+    //추후 초기 data가 있으면 수정 api로 변경하는 로직
     fetchWithoutGet<RequestNotionFolder, { id: number }>(
       POST_URL.NOTION_FOLDER(),
       'post',
