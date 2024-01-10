@@ -6,7 +6,7 @@ import RoundSquare from '../../common/RoundSquare';
 
 interface NotionItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string;
-  handleNotionItemClick: () => void;
+  handleNotionItemClick?: () => void;
   handleMoreMenuButtonClick?: () => void;
 }
 
@@ -24,12 +24,18 @@ export default function NotionItem({
 
   return (
     <RoundSquare size="sm">
-      <div
-        className="w-[90%] flex flex-row items-center justify-between gap-2"
-        onClick={handleNotionItemClick}
-      >
+      <div className="w-[90%] flex flex-row items-center justify-between gap-2">
         <CircleLine amount={1} />
-        <button className="w-full truncate text-left">{content}</button>
+        {handleNotionItemClick ? (
+          <button
+            className="w-full truncate text-left"
+            onClick={handleNotionItemClick}
+          >
+            {content}
+          </button>
+        ) : (
+          <p className="w-full truncate">{content}</p>
+        )}
         {handleMoreMenuButtonClick && (
           <MoreMenuButton
             size="sm"

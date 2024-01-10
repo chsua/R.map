@@ -5,7 +5,7 @@ import CircleLine from '@components/common/CircleLine';
 
 interface NotionInfoProps {
   notion: NotionFolder;
-  handleNotionItemClick: () => void;
+  handleNotionItemClick?: () => void;
 }
 
 export default function NotionInfo({
