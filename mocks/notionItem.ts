@@ -1,8 +1,14 @@
 import { rest } from 'msw';
 import { findMockNotionItem } from './mockData/notion';
-import { GET_URL, POST_URL } from 'constants/url';
+import { DELETE_URL, GET_URL, POST_URL } from 'constants/url';
 
-export const getNotionItem = [
+/**
+ * 노션 가져오기 [O]
+ * 노션 삭제하기 [O]
+ * 노션 수정하기
+ * 노션 추가하기 [O]
+ */
+export const notionItem = [
   rest.get(GET_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
     const targetId = req.params.id;
 
@@ -13,10 +19,12 @@ export const getNotionItem = [
 
     return res(ctx.status(404), ctx.json({}));
   }),
-];
 
-export const postNotionItem = [
   rest.post(POST_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({ id: Date.now() }));
+  }),
+
+  rest.delete(DELETE_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
+    return res(ctx.status(201), ctx.json({}));
   }),
 ];
