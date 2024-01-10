@@ -20,6 +20,7 @@ import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotion } from 'utils/deleteNotion';
+import ButtonWithCircle from '@components/common/ButtonWithCircle';
 
 export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
@@ -59,25 +60,21 @@ export default function Page({ params }: { params: { id: number } }) {
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
           <NotionInfo notion={notion}>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() => alert('준비중인 기능입니다.')}
-            >
-              <CircleLine amount={1} />
-              <span>연결 관계 끊기</span>
-            </button>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() =>
+            <ButtonWithCircle
+              text={'연결 관계 끊기'}
+              handleButtonClick={() => {
+                alert('준비중인 기능입니다.');
+              }}
+            />
+            <ButtonWithCircle
+              text={'개념 삭제하기'}
+              handleButtonClick={() => {
                 deleteNotion(notion.id, () => {
                   exitMoreButtonBottomSheet();
                   setTrigger((trigger) => trigger + 1);
-                })
-              }
-            >
-              <CircleLine amount={1} />
-              <span>개념 삭제하기</span>
-            </button>
+                });
+              }}
+            />
           </NotionInfo>
         </div>
       </BottomSheet>

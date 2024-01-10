@@ -18,6 +18,7 @@ import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotion } from 'utils/deleteNotion';
+import ButtonWithCircle from '@components/common/ButtonWithCircle';
 
 export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion[]>();
@@ -56,38 +57,29 @@ export default function Page({ params }: { params: { id: number } }) {
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
           <NotionInfo notion={notion}>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() => {
+            <ButtonWithCircle
+              text={'개념 수정하기'}
+              handleButtonClick={() => {
                 exitMoreButtonBottomSheet();
                 openBottomSheetForNotionSubmit(notion);
               }}
-            >
-              <CircleLine amount={1} />
-              <span>개념 수정하기</span>
-            </button>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() =>
+            />
+            <ButtonWithCircle
+              text={'개념 삭제하기'}
+              handleButtonClick={() => {
                 deleteNotion(notion.id, () => {
                   exitMoreButtonBottomSheet();
                   setTrigger((trigger) => trigger + 1);
-                })
-              }
-            >
-              <CircleLine amount={1} />
-              <span>개념 삭제하기</span>
-            </button>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() => {
+                });
+              }}
+            />
+            <ButtonWithCircle
+              text={'연관 개념 수정하기'}
+              handleButtonClick={() => {
                 alert('아직 준비 중인 기능입니다.');
                 //다른 바텀시트 만들어서 연관개념 셀렉터로 선택하도록 작성
               }}
-            >
-              <CircleLine amount={1} />
-              <span>연관 개념 수정하기</span>
-            </button>
+            />
           </NotionInfo>
         </div>
       </BottomSheet>

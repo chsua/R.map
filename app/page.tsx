@@ -19,6 +19,7 @@ import PlusNotionButton from '@components/item/PlusNotionButton';
 import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotionFolder } from 'utils/deleteNotion';
+import ButtonWithCircle from '@components/common/ButtonWithCircle';
 
 export default function Home() {
   const [data, setData] = useState<NotionFolder[]>();
@@ -57,28 +58,22 @@ export default function Home() {
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
           <NotionInfo notion={notionFolder}>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() => {
+            <ButtonWithCircle
+              text={'이름 수정하기'}
+              handleButtonClick={() => {
                 exitMoreButtonBottomSheet();
                 openBottomSheetForNotionSubmit(notionFolder);
               }}
-            >
-              <CircleLine amount={1} />
-              <span>이름 수정하기</span>
-            </button>
-            <button
-              className="flex gap-3 items-center text-sm"
-              onClick={() => {
+            />
+            <ButtonWithCircle
+              text={'폴더 삭제하기'}
+              handleButtonClick={() => {
                 deleteNotionFolder(notionFolder.id, () => {
                   exitMoreButtonBottomSheet();
                   setTrigger((trigger) => trigger + 1);
                 });
               }}
-            >
-              <CircleLine amount={1} />
-              <span>폴더 삭제하기</span>
-            </button>
+            />
           </NotionInfo>
         </div>
       </BottomSheet>
