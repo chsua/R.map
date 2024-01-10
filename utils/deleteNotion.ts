@@ -2,7 +2,7 @@ import { DELETE_URL } from 'constants/url';
 import { fetchWithoutGet } from './fetch';
 
 export const deleteNotionFolder = (id: number, subEvent?: () => void) => {
-  fetchWithoutGet(DELETE_URL.NOTION_FOLDER(id), 'delete')
+  fetchWithoutGet(DELETE_URL.NOTION_FOLDER(id), 'DELETE')
     .then(() => {
       subEvent && subEvent();
     })
@@ -12,7 +12,7 @@ export const deleteNotionFolder = (id: number, subEvent?: () => void) => {
 };
 
 export const deleteNotion = (id: number, subEvent?: () => void) => {
-  fetchWithoutGet(DELETE_URL.NOTION_ITEM(id), 'delete')
+  fetchWithoutGet(DELETE_URL.NOTION_ITEM(id), 'DELETE')
     .then(() => {
       subEvent && subEvent();
     })

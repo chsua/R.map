@@ -19,10 +19,15 @@ export interface Notion {
   relatedNotions: RelatedNotion[];
 }
 
-export interface RequestNotion {
+export interface RequestNotionForPost {
   name: string;
   content: string;
   relatedNotion: {
     id: number | null;
   };
+}
+
+export interface RequestNotionForPatch {
+  name: string;
+  content: string;
 }

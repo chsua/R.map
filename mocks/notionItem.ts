@@ -1,11 +1,11 @@
 import { rest } from 'msw';
 import { findMockNotionItem } from './mockData/notion';
-import { DELETE_URL, GET_URL, POST_URL } from 'constants/url';
+import { DELETE_URL, GET_URL, PATCH_URL, POST_URL } from 'constants/url';
 
 /**
  * 노션 가져오기 [O]
  * 노션 삭제하기 [O]
- * 노션 수정하기
+ * 노션 수정하기 [O]
  * 노션 추가하기 [O]
  */
 export const notionItem = [
@@ -22,6 +22,10 @@ export const notionItem = [
 
   rest.post(POST_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({ id: Date.now() }));
+  }),
+
+  rest.patch(PATCH_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
+    return res(ctx.status(201), ctx.json({}));
   }),
 
   rest.delete(DELETE_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {

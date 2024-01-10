@@ -23,3 +23,8 @@ export const DELETE_URL = {
   NOTION_FOLDER_MOCK: () => `/notion-folders/:id`,
   NOTION_FOLDER: (id: number) => `${base}/notion-folders/${id}`,
 };
+
+export const PATCH_URL = {
+  NOTION_ITEM_MOCK: () => `/notions/:id`,
+  NOTION_ITEM: (id: number) => `${base}/notions/${id}`,
+};

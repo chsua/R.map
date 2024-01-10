@@ -7,7 +7,7 @@ import React, { FormEventHandler, useState } from 'react';
 import {
   NotionFolder,
   Notion,
-  RequestNotion,
+  RequestNotionForPost,
   RequestNotionFolder,
 } from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
@@ -37,7 +37,7 @@ export default function FolderForm({ data, subEvent }: FolderFormProps) {
     //추후 초기 data가 있으면 수정 api로 변경하는 로직
     fetchWithoutGet<RequestNotionFolder, { id: number }>(
       POST_URL.NOTION_FOLDER(),
-      'post',
+      'POST',
       submitData,
     )
       .then((res) => {

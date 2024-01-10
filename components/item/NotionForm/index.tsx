@@ -5,22 +5,33 @@ import {
   NOTION_CONTENT_AMOUNT,
   NOTION_TITLE_AMOUNT,
 } from 'constants/amountLimit';
-import { POST_URL } from 'constants/url';
+import { PATCH_URL, POST_URL } from 'constants/url';
 import React, { FormEventHandler, useState } from 'react';
-import { Notion, RequestNotion } from 'types/notion';
+import {
+  Notion,
+  RequestNotionForPatch,
+  RequestNotionForPost,
+} from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
 
 interface NotionFormProps {
   data?: Notion;
+  relatedNotionId?: number;
   subEvent?: () => void;
 }
 
 /**
  * 사용처
  * 1. 노션 생성
+ *     - 관련 노션 없는 노션 생성
+ *     - 관련 노션 있는 노션 생성
  * 2. 노션 수정
  */
-export default function NotionForm({ data, subEvent }: NotionFormProps) {
+export default function NotionForm({
+  data,
+  relatedNotionId,
+  subEvent,
+}: NotionFormProps) {
   const [title, setTitle] = useState(data ? data.name : '');
   const [content, setContent] = useState(data ? data.content : '');
 
@@ -30,26 +41,40 @@ export default function NotionForm({ data, subEvent }: NotionFormProps) {
     if (title.length < 1 || title.length > NOTION_TITLE_AMOUNT) return;
     if (content.length < 1 || content.length > NOTION_CONTENT_AMOUNT) return;
 
-    const submitData: RequestNotion = {
-      name: title,
-      content: content,
-      relatedNotion: {
-        id: data ? data.id : null,
-      },
-    };
+    if (data) {
+      fetchWithoutGet<RequestNotionForPatch, void>(
+        PATCH_URL.NOTION_ITEM(data.id),
+        'PATCH',
+        { name: title, content },
+      )
+        .then(() => {
+          subEvent && subEvent();
+        })
+        .catch(() => {
+          alert('개념 수정이 실패했습니다. 다시 확인해주세요.');
+        });
+    } else {
+      const submitData: RequestNotionForPost = {
+        name: title,
+        content: content,
+        relatedNotion: {
+          id: relatedNotionId ?? null,
+        },
+      };
 
-    fetchWithoutGet<RequestNotion, { id: number }>(
-      POST_URL.NOTION_ITEM(),
-      'post',
-      submitData,
-    )
-      .then((res) => {
-        console.log(res.id);
-        subEvent && subEvent();
-      })
-      .catch(() => {
-        alert('개념 추가가 실패했습니다. 다시 확인해주세요.');
-      });
+      fetchWithoutGet<RequestNotionForPost, { id: number }>(
+        POST_URL.NOTION_ITEM(),
+        'POST',
+        submitData,
+      )
+        .then((res) => {
+          console.log(res.id);
+          subEvent && subEvent();
+        })
+        .catch(() => {
+          alert('개념 추가가 실패했습니다. 다시 확인해주세요.');
+        });
+    }
   };
 
   return (

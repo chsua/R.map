@@ -42,6 +42,7 @@ export default function Page({ params }: { params: { id: number } }) {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <NotionForm
+          relatedNotionId={params.id}
           subEvent={() => {
             setTrigger((trigger) => trigger + 1);
             exitSubmitButtonBottomSheet();
