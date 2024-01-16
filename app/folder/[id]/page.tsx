@@ -58,13 +58,6 @@ export default function Page({ params }: { params: { id: number } }) {
         <div className="py-7 w-full">
           <NotionInfo notion={notion}>
             <ButtonWithCircle
-              text={'개념 수정하기'}
-              handleButtonClick={() => {
-                exitMoreButtonBottomSheet();
-                openBottomSheetForNotionSubmit(notion);
-              }}
-            />
-            <ButtonWithCircle
               text={'개념 삭제하기'}
               handleButtonClick={() => {
                 deleteNotion(notion.id, () => {
@@ -96,7 +89,7 @@ export default function Page({ params }: { params: { id: number } }) {
   return (
     data && (
       <main className="flex flex-col gap-5">
-        <Title content={data && data[0] ? data[0].name : 'Graph loading...'} />
+        <Title content={data && data[0] ? data[0].name : 'empty...'} />
         <CircleLine amount={8} />
         <NotionList style="md:grid-cols-2 lg:grid-cols-3">
           {data.map((item) => {

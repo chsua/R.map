@@ -21,6 +21,7 @@ import NotionForm from '@components/item/NotionForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotion } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import MoreMenuButton from '@components/common/MoreMenuButton';
 
 export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
@@ -39,10 +40,11 @@ export default function Page({ params }: { params: { id: number } }) {
     open: openSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotionSubmit = () => {
+  const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <NotionForm
+          data={notion}
           relatedNotionId={params.id}
           subEvent={() => {
             setTrigger((trigger) => trigger + 1);
@@ -53,11 +55,50 @@ export default function Page({ params }: { params: { id: number } }) {
     ));
   };
 
-  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
-    useModal();
-  const openBottomSheetForNotion = (notion: RelatedNotion) => {
-    openMoreButtonBottomSheet(({ isOpen, close }) => (
-      <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
+  const {
+    open: openNotionMoreButtonBottomSheet,
+    exit: exitNotionMoreButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForNotion = (notion: Notion) => {
+    openNotionMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet
+        size="free"
+        closeEvent={() => exitNotionMoreButtonBottomSheet()}
+      >
+        <div className="py-7 w-full">
+          <NotionInfo notion={notion}>
+            <ButtonWithCircle
+              text={'개념 수정하기'}
+              handleButtonClick={() => {
+                exitNotionMoreButtonBottomSheet();
+                openBottomSheetForNotionSubmit(data);
+              }}
+            />
+            <ButtonWithCircle
+              text={'개념 삭제하기'}
+              handleButtonClick={() => {
+                deleteNotion(notion.id, () => {
+                  exitNotionMoreButtonBottomSheet();
+                  setTrigger((trigger) => trigger + 1);
+                });
+              }}
+            />
+          </NotionInfo>
+        </div>
+      </BottomSheet>
+    ));
+  };
+
+  const {
+    open: openRelatedNotionMoreButtonBottomSheet,
+    exit: exitRelatedNotionMoreButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForRelatedNotion = (notion: RelatedNotion) => {
+    openRelatedNotionMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet
+        size="free"
+        closeEvent={() => exitRelatedNotionMoreButtonBottomSheet()}
+      >
         <div className="py-7 w-full">
           <NotionInfo notion={notion}>
             <ButtonWithCircle
@@ -70,7 +111,7 @@ export default function Page({ params }: { params: { id: number } }) {
               text={'개념 삭제하기'}
               handleButtonClick={() => {
                 deleteNotion(notion.id, () => {
-                  exitMoreButtonBottomSheet();
+                  exitRelatedNotionMoreButtonBottomSheet();
                   setTrigger((trigger) => trigger + 1);
                 });
               }}
@@ -96,12 +137,19 @@ export default function Page({ params }: { params: { id: number } }) {
   return (
     data && (
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="flex flex-col gap-5">
-          <Title content={data.name} />
-          <CircleLine amount={8} />
-          <div className="min-h-[150px]">
-            <Description content={data.content} />
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col gap-5">
+            <Title content={data.name} />
+            <CircleLine amount={8} />
           </div>
+          <MoreMenuButton
+            direction="column"
+            size="sm"
+            onClick={() => openBottomSheetForNotion(data)}
+          />
+        </div>
+        <div className="min-h-[150px]">
+          <Description content={data.content} />
         </div>
         <NotionList>
           {data.relatedNotions.map((item) => {
@@ -110,7 +158,7 @@ export default function Page({ params }: { params: { id: number } }) {
                 <NotionItem
                   content={item.name}
                   handleMoreMenuButtonClick={() =>
-                    openBottomSheetForNotion(item)
+                    openBottomSheetForRelatedNotion(item)
                   }
                   handleNotionItemClick={() => handleNotionItemClick(item.id)}
                 />
