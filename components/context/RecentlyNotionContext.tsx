@@ -15,6 +15,7 @@ interface RecentlyNotionContextProps {
     nowNotionId: number,
     relationNotionList: EssentialNotion[],
   ) => void;
+  resetAllData: () => void;
 }
 
 const limitCount = 7;
@@ -29,6 +30,7 @@ export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
     nowNotionId: number,
     relationNotionList: EssentialNotion[],
   ) => {},
+  resetAllData: () => {},
 });
 
 export default function RecentlyNotionContext({
@@ -91,6 +93,11 @@ export default function RecentlyNotionContext({
     setNowNotionFolder(data);
   };
 
+  const resetAllData = () => {
+    setNowNotionFolder(null);
+    setRecentlyNotionList([]);
+  };
+
   return (
     <recentlyNotionContext.Provider
       value={{
@@ -98,6 +105,7 @@ export default function RecentlyNotionContext({
         updateNowNotionFolder,
         recentlyNotionList,
         updateRecentlyNotionList,
+        resetAllData,
       }}
     >
       {children}

@@ -20,11 +20,13 @@ import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotionFolder } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 
 export default function Home() {
   const [data, setData] = useState<EssentialNotion[]>();
   const [trigger, setTrigger] = useState(0);
   const { moveNotionFolderItemListPage } = useMovePage();
+  const { resetAllData } = useRecentlyNotionContext();
 
   const {
     open: openSubmitButtonBottomSheet,
@@ -86,6 +88,7 @@ export default function Home() {
         GET_URL.NOTION_FOLDER_LIST(),
       );
 
+      resetAllData();
       setData(data);
     })();
   }, [trigger]);
