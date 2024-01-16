@@ -23,5 +23,5 @@ export const fetchWithoutGet = async <T, R>(
 
   if (!response.ok) throw new Error('error');
 
-  return response.json();
+  return response.status === 201 ? response.json() : response;
 };
