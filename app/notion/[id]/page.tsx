@@ -12,7 +12,7 @@ import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
-import { Notion, RelatedNotion } from 'types/notion';
+import { Notion, EssentialNotion } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
@@ -27,7 +27,8 @@ export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
   const [trigger, setTrigger] = useState(0);
 
-  const { updateRecentlyNotionList } = useRecentlyNotionContext();
+  const { updateNowNotionFolder, updateRecentlyNotionList } =
+    useRecentlyNotionContext();
   const { moveNotionItemPage } = useMovePage();
 
   const url = GET_URL.NOTION_ITEM(params.id);
@@ -93,7 +94,7 @@ export default function Page({ params }: { params: { id: number } }) {
     open: openRelatedNotionMoreButtonBottomSheet,
     exit: exitRelatedNotionMoreButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForRelatedNotion = (notion: RelatedNotion) => {
+  const openBottomSheetForRelatedNotion = (notion: EssentialNotion) => {
     openRelatedNotionMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet
         size="free"
@@ -131,6 +132,8 @@ export default function Page({ params }: { params: { id: number } }) {
         data.id,
         data.relatedNotions,
       );
+      //api에 지금 폴더 id가 없음
+      updateNowNotionFolder({ id: data.notionFolderId, name: '소속' });
     })();
   }, [trigger]);
 

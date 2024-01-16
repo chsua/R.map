@@ -1,9 +1,9 @@
-import { NotionFolder } from 'types/notion';
+import { EssentialNotion } from 'types/notion';
 import NotionItem from '../NotionItem';
 import { ReactNode } from 'react';
 
 interface NotionInfoProps {
-  notion: NotionFolder;
+  notion: EssentialNotion;
   handleNotionItemClick?: () => void;
   children?: ReactNode;
 }

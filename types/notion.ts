@@ -1,13 +1,14 @@
 export interface NotionFolder {
   id: number;
   name: string;
+  notions: EssentialNotion[];
 }
 
 export interface RequestNotionFolder {
   name: string;
 }
 
-export interface RelatedNotion {
+export interface EssentialNotion {
   id: number;
   name: string;
 }
@@ -15,8 +16,9 @@ export interface RelatedNotion {
 export interface Notion {
   id: number;
   name: string;
+  notionFolderId: number;
   content: string;
-  relatedNotions: RelatedNotion[];
+  relatedNotions: EssentialNotion[];
 }
 
 export interface RequestNotionForPost {
