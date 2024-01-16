@@ -20,4 +20,4 @@ type Story = StoryObj<typeof meta>;
 /**
  * 기본 모형
  */
-export const Default: Story = { args: { type: 'make' } };
+export const Default: Story = {};

@@ -1,17 +1,17 @@
 import { createContext, useContext, useState } from 'react';
-import { EssenceNotion } from 'types/notion';
+import { NotionFolder } from 'types/notion';
 import { Color } from 'types/style';
 
-interface ContextNotionInfo extends EssenceNotion {
+interface ContextNotionInfo extends NotionFolder {
   color: Color;
 }
 
 interface RecentlyNotionContextProps {
   recentlyNotionList: ContextNotionInfo[];
   updateRecentlyNotionList: (
-    notionForAdd: EssenceNotion,
+    notionForAdd: NotionFolder,
     nowNotionId: number,
-    relationNotionList: EssenceNotion[],
+    relationNotionList: NotionFolder[],
   ) => void;
 }
 
@@ -20,9 +20,9 @@ const limitCount = 7;
 export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
   recentlyNotionList: [],
   updateRecentlyNotionList: (
-    notionForAdd: EssenceNotion,
+    notionForAdd: NotionFolder,
     nowNotionId: number,
-    relationNotionList: EssenceNotion[],
+    relationNotionList: NotionFolder[],
   ) => {},
 });
 
@@ -36,7 +36,7 @@ export default function RecentlyNotionContext({
   >([]);
 
   const addNotionItem = (
-    notion: EssenceNotion,
+    notion: NotionFolder,
     notionList: ContextNotionInfo[],
   ): ContextNotionInfo[] => {
     const notOverlapList = notionList.filter(({ id }) => id !== notion.id);
@@ -52,7 +52,7 @@ export default function RecentlyNotionContext({
   const checkNotionRelation = (
     notionList: ContextNotionInfo[],
     nowNotionId: number,
-    relationNotionList: EssenceNotion[],
+    relationNotionList: NotionFolder[],
   ): ContextNotionInfo[] => {
     const relationNotionIdList = relationNotionList.map((notion) => notion.id);
 
@@ -67,9 +67,9 @@ export default function RecentlyNotionContext({
   };
 
   const updateRecentlyNotionList = (
-    notionForAdd: EssenceNotion,
+    notionForAdd: NotionFolder,
     nowNotionId: number,
-    relationNotionList: EssenceNotion[],
+    relationNotionList: NotionFolder[],
   ) => {
     setRecentlyNotionList(
       checkNotionRelation(

@@ -11,7 +11,7 @@ export const getFetch = async <T>(url: string): Promise<T> => {
 
 export const fetchWithoutGet = async <T, R>(
   url: string,
-  type: 'post' | 'put' | 'delete',
+  type: 'POST' | 'PUT' | 'DELETE' | 'PATCH',
   data?: T,
 ): Promise<R> => {
   const response = await fetch(url, {
@@ -23,5 +23,5 @@ export const fetchWithoutGet = async <T, R>(
 
   if (!response.ok) throw new Error('error');
 
-  return response.json();
+  return response.status === 201 ? response.json() : response;
 };

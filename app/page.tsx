@@ -6,33 +6,83 @@ import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
 
-import { useNotionItemBottomSheet } from 'hooks/useNotionItemBottomSheet';
 import { useMovePage } from 'hooks/useMovePage';
 
-import { EssenceNotion } from 'types/notion';
+import { NotionFolder } from 'types/notion';
 import { getFetch } from 'utils/fetch';
 import { GET_URL } from 'constants/url';
+import { useModal } from 'hooks/useModal';
+
+import BottomSheet from '@components/common/BottomSheet';
+import NotionItem from '@components/item/NotionItem';
+import PlusNotionButton from '@components/item/PlusNotionButton';
+import FolderForm from '@components/item/FolderForm';
+import NotionInfo from '@components/item/NotionInfo';
+import { deleteNotionFolder } from 'utils/deleteNotion';
+import ButtonWithCircle from '@components/common/ButtonWithCircle';
 
 export default function Home() {
-  const [data, setData] = useState<EssenceNotion[]>();
-  const [trigger, setTrigger] = useState(false);
+  const [data, setData] = useState<NotionFolder[]>();
+  const [trigger, setTrigger] = useState(0);
+  const { moveNotionFolderItemListPage } = useMovePage();
 
   const {
-    handlePlusButtonClick,
-    handleMoreMenuButtonClick,
-    bottomSheetComponent,
-  } = useNotionItemBottomSheet({
-    type: 'make',
-    sideEffectFn: () => setTrigger(!trigger),
-  });
+    open: openSubmitButtonBottomSheet,
+    close: closeSubmitButtonBottomSheet,
+    exit: exitSubmitButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForNotionSubmit = (notionFolder?: NotionFolder) => {
+    openSubmitButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet size="free" closeEvent={() => exitSubmitButtonBottomSheet()}>
+        <div className="py-7 w-full">
+          <FolderForm
+            data={notionFolder}
+            subEvent={() => {
+              setTrigger((trigger) => trigger + 1);
+              exitSubmitButtonBottomSheet();
+            }}
+          />
+        </div>
+      </BottomSheet>
+    ));
+  };
 
-  const { moveNotionFolderItemListPage } = useMovePage();
+  //현재 exit로 해서 페이드 아웃 애니메이션 적용 안됨
+  const {
+    open: openMoreButtonBottomSheet,
+    close: closeMoreButtonBottomSheet,
+    exit: exitMoreButtonBottomSheet,
+  } = useModal();
+  const openBottomSheetForNotion = (notionFolder: NotionFolder) => {
+    openMoreButtonBottomSheet(({ isOpen, close }) => (
+      <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
+        <div className="py-7 w-full">
+          <NotionInfo notion={notionFolder}>
+            <ButtonWithCircle
+              text={'이름 수정하기'}
+              handleButtonClick={() => {
+                exitMoreButtonBottomSheet();
+                openBottomSheetForNotionSubmit(notionFolder);
+              }}
+            />
+            <ButtonWithCircle
+              text={'폴더 삭제하기'}
+              handleButtonClick={() => {
+                deleteNotionFolder(notionFolder.id, () => {
+                  exitMoreButtonBottomSheet();
+                  setTrigger((trigger) => trigger + 1);
+                });
+              }}
+            />
+          </NotionInfo>
+        </div>
+      </BottomSheet>
+    ));
+  };
 
   useEffect(() => {
     (async () => {
-      const data = await getFetch<EssenceNotion[]>(
-        GET_URL.NOTION_FOLDER_LIST(),
-      );
+      const data = await getFetch<NotionFolder[]>(GET_URL.NOTION_FOLDER_LIST());
 
       setData(data);
     })();
@@ -43,14 +93,28 @@ export default function Home() {
       <main className="flex flex-col gap-5">
         <Title content="R:map" />
         <CircleLine amount={8} />
-        <NotionList
-          style="md:grid-cols-2 lg:grid-cols-3"
-          notionList={data}
-          handlePlusButtonClick={handlePlusButtonClick}
-          handleMoreMenuButtonClick={handleMoreMenuButtonClick}
-          handleNotionItemClick={moveNotionFolderItemListPage}
-        />
-        {bottomSheetComponent}
+        <NotionList style="md:grid-cols-2 lg:grid-cols-3">
+          {data.map((item) => {
+            return (
+              <li key={item.name}>
+                <NotionItem
+                  content={item.name}
+                  handleMoreMenuButtonClick={() =>
+                    openBottomSheetForNotion(item)
+                  }
+                  handleNotionItemClick={() =>
+                    moveNotionFolderItemListPage(item.id)
+                  }
+                />
+              </li>
+            );
+          })}
+          <li>
+            <PlusNotionButton
+              onClick={() => openBottomSheetForNotionSubmit()}
+            />
+          </li>
+        </NotionList>
       </main>
     )
   );

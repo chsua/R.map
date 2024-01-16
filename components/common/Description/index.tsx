@@ -11,7 +11,9 @@ export default function Description({ content }: { content: string }) {
 
   return (
     <div
-      className={`${isNowBlur ? 'blur-sm' : ''} cursor-pointer`}
+      className={`${
+        isNowBlur ? 'blur-sm' : ''
+      } cursor-pointer flex flex-col gap-3`}
       onClick={toggleBlur}
     >
       {content.split('\n').map((text, index) => (

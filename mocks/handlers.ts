@@ -1,9 +1,8 @@
-import { getNotionFolder, getNotionListInFolder } from './notionFolder';
-import { getNotionItem, postNotionItem } from './notionItem';
+import { notionFolder, getNotionListInFolder } from './notionFolder';
+import { notionItem } from './notionItem';
 
 export const handlers = [
-  ...getNotionItem,
-  ...postNotionItem,
-  ...getNotionFolder,
+  ...notionItem,
+  ...notionFolder,
   ...getNotionListInFolder,
 ];
