@@ -25,11 +25,10 @@ export const notionFolder = [
 ];
 
 export const getNotionListInFolder = [
-  rest.get(GET_URL.NOTION_LIST_IN_FOLDER_MOCK(), (req, res, ctx) => {
+  rest.get(GET_URL.NOTION_FOLDER_MOCK(), (req, res, ctx) => {
     return res(
       ctx.status(mockingStatus.get.notionFolder),
       ctx.json(mockNotionFolder),
     );
-
   }),
 ];
