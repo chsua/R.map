@@ -23,7 +23,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <ModalContext>
             <RecentlyNotionContext>
-              <div className="w-[95vw] sm:w-[90vw] md:w-[80vw] h-[90vh] mt-[2vh] sm:mt-[5vh] m-auto ">
+              <div className="w-[95vw] sm:w-[90vw] md:w-[80vw] h-fit my-[3vh] sm:my-[5vh] m-auto ">
                 <Navigation />
                 {children}
               </div>
