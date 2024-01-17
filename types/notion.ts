@@ -27,6 +27,7 @@ export interface Notion {
 export interface RequestNotionForPost {
   name: string;
   content: string;
+  notionFolderId: number;
   relatedNotion: {
     id: number | null;
   };
