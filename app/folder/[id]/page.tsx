@@ -10,7 +10,7 @@ import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
-import { Notion } from 'types/notion';
+import { EssentialNotion, Notion, NotionFolder } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
@@ -21,12 +21,12 @@ import { deleteNotion } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [data, setData] = useState<Notion[]>();
+  const [data, setData] = useState<EssentialNotion[]>();
   const [trigger, setTrigger] = useState(0);
 
   const { moveNotionItemPage } = useMovePage();
 
-  const url = GET_URL.NOTION_LIST_IN_FOLDER(params.id);
+  const url = GET_URL.NOTION_FOLDER(params.id);
 
   const handleNotionItemClick = (id: number) => {
     moveNotionItemPage(id);
@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
   const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
     useModal();
-  const openBottomSheetForNotion = (notion: Notion) => {
+  const openBottomSheetForNotion = (notion: EssentialNotion) => {
     openMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
@@ -81,8 +81,8 @@ export default function Page({ params }: { params: { id: number } }) {
 
   useEffect(() => {
     (async () => {
-      const data = await getFetch<Notion[]>(url);
-      setData(data);
+      const data = await getFetch<NotionFolder>(url);
+      setData(data.notions);
     })();
   }, [trigger]);
 

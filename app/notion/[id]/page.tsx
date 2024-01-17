@@ -132,27 +132,31 @@ export default function Page({ params }: { params: { id: number } }) {
         data.id,
         data.relatedNotions,
       );
-      //api에 지금 폴더 id가 없음
-      updateNowNotionFolder({ id: data.notionFolderId, name: '소속' });
+      updateNowNotionFolder({
+        id: data.notionFolder.id,
+        name: data.notionFolder.name,
+      });
     })();
   }, [trigger]);
 
   return (
     data && (
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-col gap-5">
-            <Title content={data.name} />
-            <CircleLine amount={8} />
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-5">
+              <Title content={data.name} />
+              <CircleLine amount={8} />
+            </div>
+            <MoreMenuButton
+              direction="column"
+              size="sm"
+              onClick={() => openBottomSheetForNotion(data)}
+            />
           </div>
-          <MoreMenuButton
-            direction="column"
-            size="sm"
-            onClick={() => openBottomSheetForNotion(data)}
-          />
-        </div>
-        <div className="min-h-[150px]">
-          <Description content={data.content} />
+          <div className="min-h-[150px]">
+            <Description content={data.content} />
+          </div>
         </div>
         <NotionList>
           {data.relatedNotions.map((item) => {

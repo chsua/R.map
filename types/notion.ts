@@ -16,7 +16,10 @@ export interface EssentialNotion {
 export interface Notion {
   id: number;
   name: string;
-  notionFolderId: number;
+  notionFolder: {
+    id: number;
+    name: string;
+  };
   content: string;
   relatedNotions: EssentialNotion[];
 }
