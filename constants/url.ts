@@ -1,5 +1,5 @@
-const base = '';
-// const base = process.env.NEXT_PUBLIC_BASE_URL;
+// const base = '';
+const base = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const GET_URL = {
   NOTION_ITEM_MOCK: () => `/notions/:id`,
