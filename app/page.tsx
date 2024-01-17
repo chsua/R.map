@@ -8,7 +8,7 @@ import CircleLine from '@components/common/CircleLine';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-import { NotionFolder } from 'types/notion';
+import { EssentialNotion } from 'types/notion';
 import { getFetch } from 'utils/fetch';
 import { GET_URL } from 'constants/url';
 import { useModal } from 'hooks/useModal';
@@ -20,18 +20,20 @@ import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotionFolder } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 
 export default function Home() {
-  const [data, setData] = useState<NotionFolder[]>();
+  const [data, setData] = useState<EssentialNotion[]>();
   const [trigger, setTrigger] = useState(0);
   const { moveNotionFolderItemListPage } = useMovePage();
+  const { resetAllData } = useRecentlyNotionContext();
 
   const {
     open: openSubmitButtonBottomSheet,
     close: closeSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotionSubmit = (notionFolder?: NotionFolder) => {
+  const openBottomSheetForNotionSubmit = (notionFolder?: EssentialNotion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitSubmitButtonBottomSheet()}>
         <div className="py-7 w-full">
@@ -53,7 +55,7 @@ export default function Home() {
     close: closeMoreButtonBottomSheet,
     exit: exitMoreButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotion = (notionFolder: NotionFolder) => {
+  const openBottomSheetForNotion = (notionFolder: EssentialNotion) => {
     openMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
         <div className="py-7 w-full">
@@ -82,8 +84,11 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const data = await getFetch<NotionFolder[]>(GET_URL.NOTION_FOLDER_LIST());
+      const data = await getFetch<EssentialNotion[]>(
+        GET_URL.NOTION_FOLDER_LIST(),
+      );
 
+      resetAllData();
       setData(data);
     })();
   }, [trigger]);

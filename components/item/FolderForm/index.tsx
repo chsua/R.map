@@ -5,7 +5,7 @@ import { NOTION_TITLE_AMOUNT } from 'constants/amountLimit';
 import { POST_URL } from 'constants/url';
 import React, { FormEventHandler, useState } from 'react';
 import {
-  NotionFolder,
+  EssentialNotion,
   Notion,
   RequestNotionForPost,
   RequestNotionFolder,
@@ -13,7 +13,7 @@ import {
 import { fetchWithoutGet } from 'utils/fetch';
 
 interface FolderFormProps {
-  data?: NotionFolder;
+  data?: EssentialNotion;
   subEvent?: () => void;
 }
 

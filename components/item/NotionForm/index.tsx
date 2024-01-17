@@ -15,6 +15,7 @@ import {
 import { fetchWithoutGet } from 'utils/fetch';
 
 interface NotionFormProps {
+  notionFolderId: number;
   data?: Notion;
   relatedNotionId?: number;
   subEvent?: () => void;
@@ -28,6 +29,7 @@ interface NotionFormProps {
  * 2. 노션 수정
  */
 export default function NotionForm({
+  notionFolderId,
   data,
   relatedNotionId,
   subEvent,
@@ -57,6 +59,7 @@ export default function NotionForm({
       const submitData: RequestNotionForPost = {
         name: title,
         content: content,
+        notionFolderId: notionFolderId,
         relatedNotion: {
           id: relatedNotionId ?? null,
         },

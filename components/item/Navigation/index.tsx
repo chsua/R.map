@@ -7,8 +7,9 @@ import RoundSquare from '@components/common/RoundSquare';
 import { useMovePage } from 'hooks/useMovePage';
 
 export default function Navigation() {
-  const { recentlyNotionList } = useRecentlyNotionContext();
-  const { moveMainPage, moveNotionItemPage } = useMovePage();
+  const { nowNotionFolder, recentlyNotionList } = useRecentlyNotionContext();
+  const { moveMainPage, moveNotionFolderItemListPage, moveNotionItemPage } =
+    useMovePage();
 
   return (
     <div className="overflow-x-auto overflow-y-hidden snap-x">
@@ -21,6 +22,16 @@ export default function Navigation() {
             홈페이지
           </button>
         </RoundSquare>
+        {nowNotionFolder && (
+          <RoundSquare size="free" color="lightBlue">
+            <button
+              className="w-max min-w-[80px] h-[30px] pl-2 pr-2 font-bold"
+              onClick={() => moveNotionFolderItemListPage(nowNotionFolder.id)}
+            >
+              {nowNotionFolder.name} 폴더
+            </button>
+          </RoundSquare>
+        )}
         {recentlyNotionList.map(({ id, name, color }) => {
           return (
             <Fragment key={id}>
