@@ -4,7 +4,7 @@ import RecentlyNotionContext from '@components/context/RecentlyNotionContext';
 import Navigation from '@components/item/Navigation';
 
 import './globals.css';
-import { turnOnMsw } from 'utils/turnOnMsw';
+// import { turnOnMsw } from 'utils/turnOnMsw';
 import ModalContext from '@components/context/ModalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -13,7 +13,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  turnOnMsw();
+  // turnOnMsw();
 
   const queryClient = new QueryClient();
 
