@@ -8,7 +8,7 @@ export const notionFolder = [
     return res(
       ctx.delay(1000),
       ctx.status(mockingStatus.get.notionFolderList),
-      // ctx.json(mockNotionFolder),
+      ctx.json(mockNotionFolder),
     );
   }),
 
@@ -30,5 +30,6 @@ export const getNotionListInFolder = [
       ctx.status(mockingStatus.get.notionFolder),
       ctx.json(mockNotionFolder),
     );
+
   }),
 ];

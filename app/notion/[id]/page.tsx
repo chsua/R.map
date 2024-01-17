@@ -12,7 +12,7 @@ import { useMovePage } from 'hooks/useMovePage';
 
 import { GET_URL } from 'constants/url';
 import { getFetch } from 'utils/fetch';
-import { Notion, RelatedNotion } from 'types/notion';
+import { Notion, EssentialNotion } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
@@ -27,7 +27,7 @@ export default function Page({ params }: { params: { id: number } }) {
   const [data, setData] = useState<Notion>();
   const [trigger, setTrigger] = useState(0);
 
-  const { updateRecentlyNotionList } = useRecentlyNotionContext();
+  const { updateNowNotionFolder ,updateRecentlyNotionList } = useRecentlyNotionContext();
   const { moveNotionItemPage, moveMainPage } = useMovePage();
 
   const url = GET_URL.NOTION_ITEM(params.id);
@@ -40,10 +40,42 @@ export default function Page({ params }: { params: { id: number } }) {
     open: openSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
+
+  const {
+    open: openNotionMoreButtonBottomSheet,
+    exit: exitNotionMoreButtonBottomSheet,
+  } = useModal();
+
+  const {
+    open: openRelatedNotionMoreButtonBottomSheet,
+    exit: exitRelatedNotionMoreButtonBottomSheet,
+  } = useModal();
+
+  useEffect(() => {
+    (async () => {
+      const data = await getFetch<Notion>(url);
+      setData(data);
+      updateRecentlyNotionList(
+        { id: data.id, name: data.name },
+        data.id,
+        data.relatedNotions,
+      );
+      updateNowNotionFolder({
+        id: data.notionFolder.id,
+        name: data.notionFolder.name,
+      });
+    })();
+  }, [trigger]);
+
+  if (!data) {
+    return <></>;
+  }
+
   const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <NotionForm
+          notionFolderId={data.notionFolder.id}
           data={notion}
           relatedNotionId={params.id}
           subEvent={() => {
@@ -55,10 +87,6 @@ export default function Page({ params }: { params: { id: number } }) {
     ));
   };
 
-  const {
-    open: openNotionMoreButtonBottomSheet,
-    exit: exitNotionMoreButtonBottomSheet,
-  } = useModal();
   const openBottomSheetForNotion = (notion: Notion) => {
     openNotionMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet
@@ -91,11 +119,7 @@ export default function Page({ params }: { params: { id: number } }) {
     ));
   };
 
-  const {
-    open: openRelatedNotionMoreButtonBottomSheet,
-    exit: exitRelatedNotionMoreButtonBottomSheet,
-  } = useModal();
-  const openBottomSheetForRelatedNotion = (notion: RelatedNotion) => {
+  const openBottomSheetForRelatedNotion = (notion: EssentialNotion) => {
     openRelatedNotionMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet
         size="free"
@@ -124,21 +148,9 @@ export default function Page({ params }: { params: { id: number } }) {
     ));
   };
 
-  useEffect(() => {
-    (async () => {
-      const data = await getFetch<Notion>(url);
-      setData(data);
-      updateRecentlyNotionList(
-        { id: data.id, name: data.name },
-        data.id,
-        data.relatedNotions,
-      );
-    })();
-  }, [trigger]);
-
   return (
-    data && (
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-5">
             <Title content={data.name} />
@@ -153,27 +165,25 @@ export default function Page({ params }: { params: { id: number } }) {
         <div className="min-h-[150px]">
           <Description content={data.content} />
         </div>
-        <NotionList>
-          {data.relatedNotions.map((item) => {
-            return (
-              <li key={item.name}>
-                <NotionItem
-                  content={item.name}
-                  handleMoreMenuButtonClick={() =>
-                    openBottomSheetForRelatedNotion(item)
-                  }
-                  handleNotionItemClick={() => handleNotionItemClick(item.id)}
-                />
-              </li>
-            );
-          })}
-          <li>
-            <PlusNotionButton
-              onClick={() => openBottomSheetForNotionSubmit()}
-            />
-          </li>
-        </NotionList>
-      </main>
-    )
+      </div>
+      <NotionList>
+        {data.relatedNotions.map((item) => {
+          return (
+            <li key={item.name}>
+              <NotionItem
+                content={item.name}
+                handleMoreMenuButtonClick={() =>
+                  openBottomSheetForRelatedNotion(item)
+                }
+                handleNotionItemClick={() => handleNotionItemClick(item.id)}
+              />
+            </li>
+          );
+        })}
+        <li>
+          <PlusNotionButton onClick={() => openBottomSheetForNotionSubmit()} />
+        </li>
+      </NotionList>
+    </main>
   );
 }

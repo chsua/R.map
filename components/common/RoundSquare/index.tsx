@@ -17,6 +17,7 @@ const heightStyle: Record<Size | 'free', string> = {
 const colorInfo: Record<Color, string> = {
   default: 'bg-slate-100 hover:bg-slate-200',
   blue: 'bg-blue-300 hover:bg-blue-400',
+  lightBlue: 'bg-blue-100 hover:bg-blue-200',
   orange: 'bg-orange-300 hover:bg-orange-400',
   lightOrange: 'bg-orange-100 hover:bg-orange-200',
 };

@@ -6,7 +6,10 @@ import CircleLine from '@components/common/CircleLine';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-import { NotionFolder } from 'types/notion';
+
+import { EssentialNotion, NotionFolder } from 'types/notion';
+import { getFetch } from 'utils/fetch';
+import { GET_URL } from 'constants/url';
 import { useModal } from 'hooks/useModal';
 
 import BottomSheet from '@components/common/BottomSheet';
@@ -16,17 +19,20 @@ import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotionFolder } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 import { useGetNotionFolderList } from 'hooks/query/useGetNotionFolderList';
 
 export default function Home() {
   const { data, refetch } = useGetNotionFolderList();
+
   const { moveNotionFolderItemListPage } = useMovePage();
+  const { resetAllData } = useRecentlyNotionContext();
 
   const {
     open: openSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
-  const openBottomSheetForNotionSubmit = (notionFolder?: NotionFolder) => {
+  const openBottomSheetForNotionSubmit = (notionFolder?: EssentialNotion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitSubmitButtonBottomSheet()}>
         <div className="py-7 w-full">
@@ -71,6 +77,7 @@ export default function Home() {
       </BottomSheet>
     ));
   };
+
 
   return (
     data && (

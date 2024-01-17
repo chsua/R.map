@@ -1,29 +1,36 @@
-import { createContext, useContext, useState } from 'react';
-import { NotionFolder } from 'types/notion';
+import { createContext, useContext, useMemo, useState } from 'react';
+import { EssentialNotion } from 'types/notion';
 import { Color } from 'types/style';
 
-interface ContextNotionInfo extends NotionFolder {
+interface ContextNotionInfo extends EssentialNotion {
   color: Color;
 }
 
 interface RecentlyNotionContextProps {
+  nowNotionFolder: EssentialNotion | null;
+  updateNowNotionFolder: (data: EssentialNotion) => void;
   recentlyNotionList: ContextNotionInfo[];
   updateRecentlyNotionList: (
-    notionForAdd: NotionFolder,
+    notionForAdd: EssentialNotion,
     nowNotionId: number,
-    relationNotionList: NotionFolder[],
+    relationNotionList: EssentialNotion[],
   ) => void;
+  resetAllData: () => void;
 }
 
 const limitCount = 7;
 
 export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
+  nowNotionFolder: null,
+  updateNowNotionFolder: (data: EssentialNotion) => {},
   recentlyNotionList: [],
+
   updateRecentlyNotionList: (
-    notionForAdd: NotionFolder,
+    notionForAdd: EssentialNotion,
     nowNotionId: number,
-    relationNotionList: NotionFolder[],
+    relationNotionList: EssentialNotion[],
   ) => {},
+  resetAllData: () => {},
 });
 
 export default function RecentlyNotionContext({
@@ -34,9 +41,11 @@ export default function RecentlyNotionContext({
   const [recentlyNotionList, setRecentlyNotionList] = useState<
     ContextNotionInfo[]
   >([]);
+  const [nowNotionFolder, setNowNotionFolder] =
+    useState<EssentialNotion | null>(null);
 
   const addNotionItem = (
-    notion: NotionFolder,
+    notion: EssentialNotion,
     notionList: ContextNotionInfo[],
   ): ContextNotionInfo[] => {
     const notOverlapList = notionList.filter(({ id }) => id !== notion.id);
@@ -52,7 +61,7 @@ export default function RecentlyNotionContext({
   const checkNotionRelation = (
     notionList: ContextNotionInfo[],
     nowNotionId: number,
-    relationNotionList: NotionFolder[],
+    relationNotionList: EssentialNotion[],
   ): ContextNotionInfo[] => {
     const relationNotionIdList = relationNotionList.map((notion) => notion.id);
 
@@ -67,9 +76,9 @@ export default function RecentlyNotionContext({
   };
 
   const updateRecentlyNotionList = (
-    notionForAdd: NotionFolder,
+    notionForAdd: EssentialNotion,
     nowNotionId: number,
-    relationNotionList: NotionFolder[],
+    relationNotionList: EssentialNotion[],
   ) => {
     setRecentlyNotionList(
       checkNotionRelation(
@@ -80,9 +89,24 @@ export default function RecentlyNotionContext({
     );
   };
 
+  const updateNowNotionFolder = (data: EssentialNotion) => {
+    setNowNotionFolder(data);
+  };
+
+  const resetAllData = () => {
+    setNowNotionFolder(null);
+    setRecentlyNotionList([]);
+  };
+
   return (
     <recentlyNotionContext.Provider
-      value={{ recentlyNotionList, updateRecentlyNotionList }}
+      value={{
+        nowNotionFolder,
+        updateNowNotionFolder,
+        recentlyNotionList,
+        updateRecentlyNotionList,
+        resetAllData,
+      }}
     >
       {children}
     </recentlyNotionContext.Provider>
