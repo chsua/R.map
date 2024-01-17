@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import NotionList from '@components/item/NotionList';
 import Title from '@components/common/Title';
 import CircleLine from '@components/common/CircleLine';
@@ -9,8 +7,6 @@ import CircleLine from '@components/common/CircleLine';
 import { useMovePage } from 'hooks/useMovePage';
 
 import { NotionFolder } from 'types/notion';
-import { getFetch } from 'utils/fetch';
-import { GET_URL } from 'constants/url';
 import { useModal } from 'hooks/useModal';
 
 import BottomSheet from '@components/common/BottomSheet';
@@ -20,15 +16,14 @@ import FolderForm from '@components/item/FolderForm';
 import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotionFolder } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import { useGetNotionFolderList } from 'hooks/query/useGetNotionFolderList';
 
 export default function Home() {
-  const [data, setData] = useState<NotionFolder[]>();
-  const [trigger, setTrigger] = useState(0);
+  const { data, refetch } = useGetNotionFolderList();
   const { moveNotionFolderItemListPage } = useMovePage();
 
   const {
     open: openSubmitButtonBottomSheet,
-    close: closeSubmitButtonBottomSheet,
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
   const openBottomSheetForNotionSubmit = (notionFolder?: NotionFolder) => {
@@ -38,7 +33,7 @@ export default function Home() {
           <FolderForm
             data={notionFolder}
             subEvent={() => {
-              setTrigger((trigger) => trigger + 1);
+              refetch();
               exitSubmitButtonBottomSheet();
             }}
           />
@@ -48,11 +43,8 @@ export default function Home() {
   };
 
   //현재 exit로 해서 페이드 아웃 애니메이션 적용 안됨
-  const {
-    open: openMoreButtonBottomSheet,
-    close: closeMoreButtonBottomSheet,
-    exit: exitMoreButtonBottomSheet,
-  } = useModal();
+  const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
+    useModal();
   const openBottomSheetForNotion = (notionFolder: NotionFolder) => {
     openMoreButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitMoreButtonBottomSheet()}>
@@ -70,7 +62,7 @@ export default function Home() {
               handleButtonClick={() => {
                 deleteNotionFolder(notionFolder.id, () => {
                   exitMoreButtonBottomSheet();
-                  setTrigger((trigger) => trigger + 1);
+                  refetch();
                 });
               }}
             />
@@ -79,14 +71,6 @@ export default function Home() {
       </BottomSheet>
     ));
   };
-
-  useEffect(() => {
-    (async () => {
-      const data = await getFetch<NotionFolder[]>(GET_URL.NOTION_FOLDER_LIST());
-
-      setData(data);
-    })();
-  }, [trigger]);
 
   return (
     data && (
