@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { id: number } }) {
   const [trigger, setTrigger] = useState(0);
 
   const { updateRecentlyNotionList } = useRecentlyNotionContext();
-  const { moveNotionItemPage } = useMovePage();
+  const { moveNotionItemPage, moveMainPage } = useMovePage();
 
   const url = GET_URL.NOTION_ITEM(params.id);
 
@@ -80,6 +80,8 @@ export default function Page({ params }: { params: { id: number } }) {
                 deleteNotion(notion.id, () => {
                   exitNotionMoreButtonBottomSheet();
                   setTrigger((trigger) => trigger + 1);
+                  //지금 노션에 소속폴더 id가 없어서 홈페이지로 이동. 추후 폴더로 이동 예정
+                  if (notion.id === data?.id) moveMainPage();
                 });
               }}
             />
