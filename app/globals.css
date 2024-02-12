@@ -8,3 +8,13 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+input {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+textarea:focus,
+input:focus,
+button:focus {
+  outline: none;
+}
