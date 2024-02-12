@@ -1,2 +1,3 @@
 export const NOTION_TITLE_AMOUNT = 100;
+export const NOTION_RELEVANCE = 200;
 export const NOTION_CONTENT_AMOUNT = 2000;

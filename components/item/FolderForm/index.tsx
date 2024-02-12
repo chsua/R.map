@@ -60,7 +60,7 @@ export default function FolderForm({ data, subEvent }: FolderFormProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="학습할 분야를 입력해주세요"
-            className="bg-transparent w-full p-3 focus:outline-none"
+            className="bg-transparent w-full p-3 "
           />
         </RoundSquare>
         <p className="w-[98%] m-auto flex justify-between">

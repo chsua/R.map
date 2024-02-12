@@ -1,36 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import CircleLine from '@components/common/CircleLine';
 import Title from '@components/common/Title';
 import NotionList from '@components/item/NotionList';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-import { GET_URL } from 'constants/url';
-import { getFetch } from 'utils/fetch';
-import { EssentialNotion, Notion, NotionFolder } from 'types/notion';
+import { EssentialNotion, Notion } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
 import { useModal } from 'hooks/useModal';
 import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 import NotionInfo from '@components/item/NotionInfo';
-import { deleteNotion } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
+import { useGetNotionListInfolder } from 'hooks/query/useGetNotionListInfolder';
+import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
+import ToggleBox from '@components/common/ToggleBox';
+import ToggleButton from '@components/common/ToggleButton';
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [data, setData] = useState<NotionFolder>();
-  const [trigger, setTrigger] = useState(0);
-
   const { moveNotionItemPage } = useMovePage();
-
-  const url = GET_URL.NOTION_FOLDER(params.id);
-
-  const handleNotionItemClick = (id: number) => {
-    moveNotionItemPage(id);
-  };
+  const { data } = useGetNotionListInfolder(params.id);
 
   const {
     open: openSubmitButtonBottomSheet,
@@ -39,12 +30,14 @@ export default function Page({ params }: { params: { id: number } }) {
   const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
     useModal();
 
-  useEffect(() => {
-    (async () => {
-      const data = await getFetch<NotionFolder>(url);
-      setData(data);
-    })();
-  }, [trigger]);
+  const handleNotionItemClick = (id: number) => {
+    moveNotionItemPage(id);
+  };
+
+  const { mutate: deleteNotion } = useDeleteNotion(
+    params.id,
+    exitMoreButtonBottomSheet,
+  );
 
   if (!data) {
     return <></>;
@@ -53,14 +46,15 @@ export default function Page({ params }: { params: { id: number } }) {
   const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
-        <NotionForm
-          notionFolderId={data.id}
-          data={notion}
-          subEvent={() => {
-            setTrigger((trigger) => trigger + 1);
-            exitSubmitButtonBottomSheet();
-          }}
-        />
+        <div className="my-5 py-7 w-full flex justify-center">
+          <NotionForm
+            notionFolderId={data.id}
+            data={notion}
+            subEvent={() => {
+              exitSubmitButtonBottomSheet();
+            }}
+          />
+        </div>
       </BottomSheet>
     ));
   };
@@ -73,10 +67,7 @@ export default function Page({ params }: { params: { id: number } }) {
             <ButtonWithCircle
               text={'개념 삭제하기'}
               handleButtonClick={() => {
-                deleteNotion(notion.id, () => {
-                  exitMoreButtonBottomSheet();
-                  setTrigger((trigger) => trigger + 1);
-                });
+                deleteNotion(notion.id);
               }}
             />
             <ButtonWithCircle

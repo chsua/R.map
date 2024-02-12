@@ -13,6 +13,13 @@ export interface EssentialNotion {
   name: string;
 }
 
+export interface RelevanceNotion {
+  id: number;
+  name: string;
+  relevance: string;
+  reverseRelevance: string;
+}
+
 export interface Notion {
   id: number;
   name: string;
@@ -21,7 +28,7 @@ export interface Notion {
     name: string;
   };
   content: string;
-  relatedNotions: EssentialNotion[];
+  relatedNotions: RelevanceNotion[];
 }
 
 export interface RequestNotionForPost {
@@ -29,8 +36,10 @@ export interface RequestNotionForPost {
   content: string;
   notionFolderId: number;
   relatedNotion: {
-    id: number | null;
-  };
+    id: number;
+    relevance: string;
+    reverseRelevance: string;
+  } | null;
 }
 
 export interface RequestNotionForPatch {

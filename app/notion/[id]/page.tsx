@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 import CircleLine from '@components/common/CircleLine';
@@ -22,15 +22,18 @@ import NotionInfo from '@components/item/NotionInfo';
 import { deleteNotion } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import MoreMenuButton from '@components/common/MoreMenuButton';
+import { useGetNotion } from 'hooks/query/useGetNotion';
+import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
+import ToggleBox from '@components/common/ToggleBox';
+import ToggleButton from '@components/common/ToggleButton';
+import { ToggleControlRef } from 'types/etc';
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [data, setData] = useState<Notion>();
-  const [trigger, setTrigger] = useState(0);
-
-  const { updateNowNotionFolder ,updateRecentlyNotionList } = useRecentlyNotionContext();
-  const { moveNotionItemPage, moveMainPage } = useMovePage();
-
-  const url = GET_URL.NOTION_ITEM(params.id);
+  const { data: notionData } = useGetNotion(params.id);
+  const toggleRef = useRef<ToggleControlRef>(null);
+  const { updateNowNotionFolder, updateRecentlyNotionList } =
+    useRecentlyNotionContext();
+  const { moveNotionItemPage, moveNotionFolderItemListPage } = useMovePage();
 
   const handleNotionItemClick = (id: number) => {
     moveNotionItemPage(id);
@@ -52,37 +55,44 @@ export default function Page({ params }: { params: { id: number } }) {
   } = useModal();
 
   useEffect(() => {
-    (async () => {
-      const data = await getFetch<Notion>(url);
-      setData(data);
+    if (notionData) {
       updateRecentlyNotionList(
-        { id: data.id, name: data.name },
-        data.id,
-        data.relatedNotions,
+        { id: notionData.id, name: notionData.name },
+        notionData.id,
+        notionData.relatedNotions,
       );
       updateNowNotionFolder({
-        id: data.notionFolder.id,
-        name: data.notionFolder.name,
+        id: notionData.notionFolder.id,
+        name: notionData.notionFolder.name,
       });
-    })();
-  }, [trigger]);
+    }
+  }, []);
 
-  if (!data) {
+  const { mutate: deleteOriginNotion } = useDeleteNotion(params.id, () => {
+    exitNotionMoreButtonBottomSheet();
+    notionData && moveNotionFolderItemListPage(notionData.notionFolder.id);
+  });
+  const { mutate: deleteRelevanceNotion } = useDeleteNotion(params.id, () => {
+    exitRelatedNotionMoreButtonBottomSheet();
+  });
+
+  if (!notionData) {
     return <></>;
   }
 
   const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
-        <NotionForm
-          notionFolderId={data.notionFolder.id}
-          data={notion}
-          relatedNotionId={params.id}
-          subEvent={() => {
-            setTrigger((trigger) => trigger + 1);
-            exitSubmitButtonBottomSheet();
-          }}
-        />
+        <div className="my-5 py-7 w-full flex justify-center">
+          <NotionForm
+            notionFolderId={notionData.notionFolder.id}
+            data={notion}
+            relatedNotion={{ id: notionData.id, name: notionData.name }}
+            subEvent={() => {
+              exitSubmitButtonBottomSheet();
+            }}
+          />
+        </div>
       </BottomSheet>
     ));
   };
@@ -93,25 +103,18 @@ export default function Page({ params }: { params: { id: number } }) {
         size="free"
         closeEvent={() => exitNotionMoreButtonBottomSheet()}
       >
-        <div className="py-7 w-full">
+        <div className="my-5 py-7 w-full">
           <NotionInfo notion={notion}>
             <ButtonWithCircle
               text={'개념 수정하기'}
               handleButtonClick={() => {
                 exitNotionMoreButtonBottomSheet();
-                openBottomSheetForNotionSubmit(data);
+                openBottomSheetForNotionSubmit(notionData);
               }}
             />
             <ButtonWithCircle
               text={'개념 삭제하기'}
-              handleButtonClick={() => {
-                deleteNotion(notion.id, () => {
-                  exitNotionMoreButtonBottomSheet();
-                  setTrigger((trigger) => trigger + 1);
-                  //지금 노션에 소속폴더 id가 없어서 홈페이지로 이동. 추후 폴더로 이동 예정
-                  if (notion.id === data?.id) moveMainPage();
-                });
-              }}
+              handleButtonClick={() => deleteOriginNotion(notion.id)}
             />
           </NotionInfo>
         </div>
@@ -125,7 +128,7 @@ export default function Page({ params }: { params: { id: number } }) {
         size="free"
         closeEvent={() => exitRelatedNotionMoreButtonBottomSheet()}
       >
-        <div className="py-7 w-full">
+        <div className="my-5 py-7 w-full">
           <NotionInfo notion={notion}>
             <ButtonWithCircle
               text={'연결 관계 끊기'}
@@ -135,12 +138,7 @@ export default function Page({ params }: { params: { id: number } }) {
             />
             <ButtonWithCircle
               text={'개념 삭제하기'}
-              handleButtonClick={() => {
-                deleteNotion(notion.id, () => {
-                  exitRelatedNotionMoreButtonBottomSheet();
-                  setTrigger((trigger) => trigger + 1);
-                });
-              }}
+              handleButtonClick={() => deleteRelevanceNotion(notion.id)}
             />
           </NotionInfo>
         </div>
@@ -153,29 +151,43 @@ export default function Page({ params }: { params: { id: number } }) {
       <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-5">
-            <Title content={data.name} />
+            <Title content={notionData.name} />
             <CircleLine amount={8} />
           </div>
           <MoreMenuButton
             direction="column"
             size="sm"
-            onClick={() => openBottomSheetForNotion(data)}
+            onClick={() => openBottomSheetForNotion(notionData)}
           />
         </div>
         <div className="min-h-[150px]">
-          <Description content={data.content} />
+          <Description content={notionData.content} />
         </div>
       </div>
       <NotionList>
-        {data.relatedNotions.map((item) => {
+        {notionData.relatedNotions.map((item) => {
           return (
-            <li key={item.name}>
-              <NotionItem
-                content={item.name}
-                handleMoreMenuButtonClick={() =>
-                  openBottomSheetForRelatedNotion(item)
+            <li
+              key={item.name}
+              className="border-2 border-slate-100 rounded-lg"
+            >
+              <ToggleBox
+                ref={toggleRef}
+                children={
+                  <NotionItem
+                    content={item.name}
+                    handleMoreMenuButtonClick={() =>
+                      openBottomSheetForRelatedNotion(item)
+                    }
+                    handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                    handleToggleButtonClick={() => toggleRef?.current?.toggle()}
+                  />
                 }
-                handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                toggleChildren={
+                  <p className="text-sm px-5 py-3 gap-2 text-slate-800">
+                    {item.relevance}
+                  </p>
+                }
               />
             </li>
           );
