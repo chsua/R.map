@@ -23,6 +23,8 @@ const MOCK_DATA: RelevanceNotion = {
 
 export const Default: Story = {
   args: {
+    isChecked: false,
+    toggleCheckbox: () => {},
     originNotionName: '딸기',
     notion: MOCK_DATA,
     setRelevance: () => {},
