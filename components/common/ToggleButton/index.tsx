@@ -5,10 +5,10 @@ interface ToggleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isOpened: boolean;
 }
 
-const toggleNowClose =
-  'border-b-[14px] border-b-slate-500 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent w-0 h-0';
 const toggleNowOpen =
-  'border-t-[14px] border-t-slate-500 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent w-0 h-0';
+  'border-b-[10px] border-b-slate-500 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent w-0 h-0';
+const toggleNowClose =
+  'border-t-[10px] border-t-slate-500 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent w-0 h-0';
 
 export default function ToggleButton({ isOpened, ...rest }: ToggleButtonProps) {
   return (

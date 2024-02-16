@@ -1,4 +1,24 @@
-import { Notion } from 'types/notion';
+import { EssentialNotion, Notion } from 'types/notion';
+
+export const mockEssentialNotionBanana: EssentialNotion = {
+  id: 4,
+  name: '바나나',
+};
+
+export const mockEssentialNotionBear: EssentialNotion = {
+  id: 7,
+  name: '곰',
+};
+
+export const mockEssentialNotionSalmon: EssentialNotion = {
+  id: 6,
+  name: '연어',
+};
+
+export const mockEssentialNotionMonkey: EssentialNotion = {
+  id: 1,
+  name: '원숭이',
+};
 
 export const mockNotionMonkey: Notion = {
   id: 1,
@@ -13,6 +33,8 @@ export const mockNotionMonkey: Notion = {
     {
       id: 4,
       name: '바나나',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -30,6 +52,8 @@ export const mockNotionBananaMilk: Notion = {
     {
       id: 4,
       name: '바나나',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -47,6 +71,8 @@ export const mockNotionSnowWhite: Notion = {
     {
       id: 5,
       name: '사과',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -63,14 +89,20 @@ export const mockNotionBanana: Notion = {
     {
       id: 1,
       name: '원숭이',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
     {
       id: 2,
       name: '바나나맛 우유',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
     {
       id: 5,
       name: '사과',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -87,10 +119,14 @@ export const mockNotionApple: Notion = {
     {
       id: 3,
       name: '백설공주',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
     {
       id: 4,
       name: '바나나',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -108,6 +144,8 @@ export const mockNotionSalmon: Notion = {
     {
       id: 7,
       name: '곰',
+      relevance: '관계',
+      reverseRelevance: '역관계',
     },
   ],
 };
@@ -124,6 +162,8 @@ export const mockNotionBear: Notion = {
     {
       id: 6,
       name: '연어',
+      relevance: '곰이 먹는다고 알려진 가장 유명한 생선',
+      reverseRelevance: '천적동물!',
     },
   ],
 };

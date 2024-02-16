@@ -7,19 +7,22 @@ import { ToggleControlRef } from 'types/etc';
 import { EssentialNotion, RelevanceNotion } from 'types/notion';
 
 interface RelevanceInputToggleProps {
+  isChecked: boolean;
   originNotionName: string;
   notion: RelevanceNotion;
+  toggleCheckbox: () => void;
   setRelevance: (relevance: string) => void;
   setReverseRelevance: (relevance: string) => void;
 }
 
 export default function RelevanceInputToggle({
+  isChecked,
   originNotionName,
   notion,
+  toggleCheckbox,
   setRelevance,
   setReverseRelevance,
 }: RelevanceInputToggleProps) {
-  const toggleRef = useRef<ToggleControlRef>(null);
   const [toggleOpen, setToggleOpen] = useState(false);
   const [userInput, setUserInput] = useState<
     Pick<RelevanceNotion, 'relevance' | 'reverseRelevance'>
@@ -43,23 +46,22 @@ export default function RelevanceInputToggle({
     };
 
   const children = (
-    <div className="flex my-3">
-      <Checkbox isChecked={true} />
-      <p className="w-full mx-3">{notion.name} 토글</p>
-      {
-        <ToggleButton
-          isOpened={toggleOpen}
-          onClick={() => {
-            toggleRef.current?.toggle();
-            setToggleOpen((prev) => !prev);
-          }}
-        />
-      }
+    <div className="flex">
+      <button className="flex items-stretch w-full" onClick={toggleCheckbox}>
+        <Checkbox isChecked={isChecked} />
+        <p className="w-full mx-3 ">{notion.name}</p>
+      </button>
+      <ToggleButton
+        isOpened={toggleOpen}
+        onClick={() => {
+          setToggleOpen((prev) => !prev);
+        }}
+      />
     </div>
   );
 
   const toggleChildren = (
-    <div className="flex flex-col gap-3 text-sm">
+    <div className="flex flex-col gap-3 text-sm pt-3">
       <RoundSquare size="sm">
         <input
           className="w-[calc(100%-20px)]"
@@ -81,7 +83,7 @@ export default function RelevanceInputToggle({
 
   return (
     <ToggleBox
-      ref={toggleRef}
+      isOpen={toggleOpen}
       children={children}
       toggleChildren={toggleChildren}
     />

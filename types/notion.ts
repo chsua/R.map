@@ -35,14 +35,16 @@ export interface RequestNotionForPost {
   name: string;
   content: string;
   notionFolderId: number;
-  relatedNotion: {
-    id: number;
-    relevance: string;
-    reverseRelevance: string;
-  } | null;
+  relatedNotion: RequestRelatedNotion | null;
 }
 
 export interface RequestNotionForPatch {
   name: string;
   content: string;
+}
+
+export interface RequestRelatedNotion {
+  id: number;
+  relevance: string;
+  reverseRelevance: string;
 }

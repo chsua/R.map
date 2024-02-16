@@ -30,7 +30,10 @@ import { ToggleControlRef } from 'types/etc';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { data: notionData } = useGetNotion(params.id);
-  const toggleRef = useRef<ToggleControlRef>(null);
+  const [relevanceNotionList, setRelevanceNotionList] = useState(
+    notionData?.relatedNotions.map((info) => ({ ...info, isOpen: false })) ??
+      [],
+  );
   const { updateNowNotionFolder, updateRecentlyNotionList } =
     useRecentlyNotionContext();
   const { moveNotionItemPage, moveNotionFolderItemListPage } = useMovePage();
@@ -53,6 +56,14 @@ export default function Page({ params }: { params: { id: number } }) {
     open: openRelatedNotionMoreButtonBottomSheet,
     exit: exitRelatedNotionMoreButtonBottomSheet,
   } = useModal();
+
+  const toggleRelevanceArea = (id: number) => {
+    setRelevanceNotionList((prev) =>
+      prev.map((info) => {
+        return info.id === id ? { ...info, isOpen: !info.isOpen } : info;
+      }),
+    );
+  };
 
   useEffect(() => {
     if (notionData) {
@@ -165,14 +176,14 @@ export default function Page({ params }: { params: { id: number } }) {
         </div>
       </div>
       <NotionList>
-        {notionData.relatedNotions.map((item) => {
+        {relevanceNotionList.map((item) => {
           return (
             <li
               key={item.name}
               className="border-2 border-slate-100 rounded-lg"
             >
               <ToggleBox
-                ref={toggleRef}
+                isOpen={item.isOpen}
                 children={
                   <NotionItem
                     content={item.name}
@@ -180,7 +191,7 @@ export default function Page({ params }: { params: { id: number } }) {
                       openBottomSheetForRelatedNotion(item)
                     }
                     handleNotionItemClick={() => handleNotionItemClick(item.id)}
-                    handleToggleButtonClick={() => toggleRef?.current?.toggle()}
+                    handleToggleButtonClick={() => toggleRelevanceArea(item.id)}
                   />
                 }
                 toggleChildren={

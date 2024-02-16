@@ -16,16 +16,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export function Default() {
-  const ref = useRef<ToggleControlRef>(null);
-
-  const toggle = () => {
-    ref.current?.toggle();
-  };
-
-  const children = <button onClick={toggle}>토글을 여닫는 버튼</button>;
+  const children = <button>토글을 여닫는 버튼</button>;
   const toggleChildren = <p>보였다가 보이지 않는 자식</p>;
 
   return (
-    <ToggleBox ref={ref} children={children} toggleChildren={toggleChildren} />
+    <ToggleBox
+      isOpen={true}
+      children={children}
+      toggleChildren={toggleChildren}
+    />
   );
 }

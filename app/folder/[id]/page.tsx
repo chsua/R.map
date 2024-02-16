@@ -16,8 +16,8 @@ import NotionInfo from '@components/item/NotionInfo';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import { useGetNotionListInfolder } from 'hooks/query/useGetNotionListInfolder';
 import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
-import ToggleBox from '@components/common/ToggleBox';
-import ToggleButton from '@components/common/ToggleButton';
+import NotionListForEditRelevance from '@components/item/NotionListForEditRelevance';
+import { useState } from 'react';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { moveNotionItemPage } = useMovePage();
@@ -28,6 +28,8 @@ export default function Page({ params }: { params: { id: number } }) {
     exit: exitSubmitButtonBottomSheet,
   } = useModal();
   const { open: openMoreButtonBottomSheet, exit: exitMoreButtonBottomSheet } =
+    useModal();
+  const { open: openEditRelevanceSheet, exit: exitEditRelevanceSheet } =
     useModal();
 
   const handleNotionItemClick = (id: number) => {
@@ -42,6 +44,20 @@ export default function Page({ params }: { params: { id: number } }) {
   if (!data) {
     return <></>;
   }
+
+  const openBottomSheetForRelevanceEdit = (notion: EssentialNotion) => {
+    openEditRelevanceSheet(({ isOpen, close }) => (
+      <BottomSheet size="free" closeEvent={() => exitEditRelevanceSheet()}>
+        <p className="text-lg font-medium text-left w-[90%] pt-8">
+          "{notion.name}"의 연관관계 수정하기
+        </p>
+        <NotionListForEditRelevance
+          notionId={notion.id}
+          notionListInFolder={data.notions}
+        />
+      </BottomSheet>
+    ));
+  };
 
   const openBottomSheetForNotionSubmit = (notion?: Notion) => {
     openSubmitButtonBottomSheet(({ isOpen, close }) => (
@@ -73,8 +89,8 @@ export default function Page({ params }: { params: { id: number } }) {
             <ButtonWithCircle
               text={'연관 개념 수정하기'}
               handleButtonClick={() => {
-                alert('아직 준비 중인 기능입니다.');
-                //다른 바텀시트 만들어서 연관개념 셀렉터로 선택하도록 작성
+                exitMoreButtonBottomSheet();
+                openBottomSheetForRelevanceEdit(notion);
               }}
             />
           </NotionInfo>
