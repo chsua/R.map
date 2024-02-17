@@ -27,4 +27,6 @@ export const DELETE_URL = {
 export const PATCH_URL = {
   NOTION_ITEM_MOCK: () => `/notions/:id`,
   NOTION_ITEM: (id: number) => `${base}/notions/${id}`,
+  RELATED_NOTION_LIST_MOCK: (id: number) => `${base}/notion-relations/${id}`,
+  RELATED_NOTION_LIST: (id: number) => `${base}/notion-relations/${id}`,
 };
