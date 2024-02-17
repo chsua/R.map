@@ -6,10 +6,8 @@ import CircleLine from '@components/common/CircleLine';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-
 import { EssentialNotion, NotionFolder } from 'types/notion';
-import { getFetch } from 'utils/fetch';
-import { GET_URL } from 'constants/url';
+
 import { useModal } from 'hooks/useModal';
 
 import BottomSheet from '@components/common/BottomSheet';
@@ -21,12 +19,17 @@ import { deleteNotionFolder } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 import { useGetNotionFolderList } from 'hooks/query/useGetNotionFolderList';
+import { useEffect } from 'react';
 
 export default function Home() {
   const { data, refetch } = useGetNotionFolderList();
 
   const { moveNotionFolderItemListPage } = useMovePage();
   const { resetAllData } = useRecentlyNotionContext();
+
+  useEffect(() => {
+    resetAllData();
+  }, []);
 
   const {
     open: openSubmitButtonBottomSheet,
@@ -77,7 +80,6 @@ export default function Home() {
       </BottomSheet>
     ));
   };
-
 
   return (
     data && (

@@ -16,7 +16,7 @@ export const getFetch = async <T>(url: string): Promise<T> => {
   //   );
   // }
 
-  return response.json();
+  return response.ok ? response.json() : [];
 };
 
 export const fetchWithoutGet = async <T, R>(
