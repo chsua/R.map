@@ -11,9 +11,18 @@ export const getFetch = async <T>(url: string): Promise<T> => {
 
   // 자꾸 런타임 오류가 나서 일단 각주처리
   // if (!response.ok) {
-  //   throw new Error(
-  //     JSON.stringify({ status: response.status, message: response.text() }),
-  //   );
+  //   if (response.status >= 500) {
+  //     throw new Error(
+  //       JSON.stringify({
+  //         status: response.status,
+  //         message: '관리자에게 문의해주세요',
+  //       }),
+  //     );
+  //   } else {
+  //     throw new Error(
+  //       JSON.stringify({ status: response.status, message: response.text() }),
+  //     );
+  //   }
   // }
 
   return response.ok ? response.json() : [];

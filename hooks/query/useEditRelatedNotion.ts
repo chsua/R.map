@@ -1,3 +1,4 @@
+import { useToastContext } from '@components/context/toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from 'constants/queryKey';
 import { PATCH_URL } from 'constants/url';
@@ -6,6 +7,7 @@ import { fetchWithoutGet } from 'utils/fetch';
 
 export const useEditRelatedNotion = (id: number, subEvent?: () => void) => {
   const queryClient = useQueryClient();
+  const { addMessage } = useToastContext();
 
   const { mutate, isLoading, isSuccess } = useMutation(
     (data: RequestRelatedNotion[]) =>
@@ -16,9 +18,10 @@ export const useEditRelatedNotion = (id: number, subEvent?: () => void) => {
         queryClient.invalidateQueries([QUERY_KEY.NOTION, String(id)]);
 
         subEvent && subEvent();
+        addMessage('관련성을 수정했습니다.');
       },
       onError: (error) => {
-        alert('관련개념 수정을 실패했습니다.');
+        addMessage('관련성 수정에 실패했습니다.');
       },
     },
   );

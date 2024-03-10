@@ -9,7 +9,7 @@ import {
 import { PATCH_URL, POST_URL } from 'constants/url';
 import { usePatchNotion } from 'hooks/query/usePatchNotion';
 import { usePostNotion } from 'hooks/query/usePostNotion';
-import React, { FormEventHandler, useState } from 'react';
+import React, { FormEventHandler, useEffect, useState } from 'react';
 import {
   EssentialNotion,
   Notion,

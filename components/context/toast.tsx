@@ -44,8 +44,6 @@ export default function ToastContext({ children }: PropsWithChildren) {
   }, [toastList]);
 
   const addMessage = (message: string) => {
-    if (toastList.find((toast) => toast.text === message)) return;
-
     const id = Date.now();
     setToastList((toastList) => [...toastList, { id, text: message }]);
   };

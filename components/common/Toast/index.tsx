@@ -35,7 +35,7 @@ export default memo(function Toast({ children, size }: ToastProps) {
 
   return (
     <div
-      className={`rounded-md px-4 py-2 bg-[rgba(0,0,0,0.6)] text-white text-sm w-3/4 md:w-2/4  m-auto
+      className={`rounded-md px-4 py-2 bg-[rgba(0,0,0,0.6)] text-white text-sm w-3/4 md:w-2/4  m-auto flex items-center
       ${isShownStyle[String(isShown) as 'true' | 'false']} 
       ${animation[isShown ? 'fadeIn' : 'fadeOut']} 
       ${sizeStyle[size]}`}

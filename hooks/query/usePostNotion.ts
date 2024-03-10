@@ -1,3 +1,4 @@
+import { useToastContext } from '@components/context/toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from 'constants/queryKey';
 import { POST_URL } from 'constants/url';
@@ -9,6 +10,7 @@ export const usePostNotion = (
   id: number,
   subEvent?: () => void,
 ) => {
+  const { addMessage } = useToastContext();
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isSuccess } = useMutation(
@@ -24,10 +26,11 @@ export const usePostNotion = (
           String(id),
         ]);
 
+        addMessage('개념을 등록했습니다.');
         subEvent && subEvent();
       },
       onError: (error) => {
-        alert('개념 추가를 실패했습니다.');
+        addMessage('개념 등록을 실패했습니다.');
       },
     },
   );
