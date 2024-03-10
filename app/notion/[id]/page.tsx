@@ -66,20 +66,6 @@ export default function Page({ params }: { params: { id: number } }) {
     );
   };
 
-  useEffect(() => {
-    if (notionData) {
-      updateRecentlyNotionList(
-        { id: notionData.id, name: notionData.name },
-        notionData.id,
-        notionData.relatedNotions,
-      );
-      updateNowNotionFolder({
-        id: notionData.notionFolder.id,
-        name: notionData.notionFolder.name,
-      });
-    }
-  }, []);
-
   const { mutate: deleteOriginNotion } = useDeleteNotion(params.id, () => {
     exitNotionMoreButtonBottomSheet();
     notionData && moveNotionFolderItemListPage(notionData.notionFolder.id);
@@ -161,6 +147,27 @@ export default function Page({ params }: { params: { id: number } }) {
       </BottomSheet>
     ));
   };
+
+  useEffect(() => {
+    if (notionData) {
+      updateRecentlyNotionList(
+        { id: notionData.id, name: notionData.name },
+        notionData.id,
+        notionData.relatedNotions,
+      );
+      updateNowNotionFolder({
+        id: notionData.notionFolder.id,
+        name: notionData.notionFolder.name,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    setRelevanceNotionList(
+      notionData?.relatedNotions.map((info) => ({ ...info, isOpen: false })) ??
+        [],
+    );
+  }, [notionData]);
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
