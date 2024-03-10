@@ -1,8 +1,6 @@
-import { ToastInfo } from '@hooks/context/toast';
-
-import Toast from '@components/common/Toast';
-
+import { ToastInfo } from '@components/context/toast';
 import * as S from './style';
+import Toast from '../Toast';
 interface ToastContainerProps {
   toastList: ToastInfo[];
 }
@@ -10,7 +8,7 @@ interface ToastContainerProps {
 export default function ToastContainer({ toastList }: ToastContainerProps) {
   return (
     <S.Container>
-      {toastList.map(toast => (
+      {toastList.map((toast) => (
         <Toast key={toast.id} size="free">
           {toast.text}
         </Toast>
