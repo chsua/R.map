@@ -4,6 +4,6 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   isChecked: boolean;
 }
 
-export default function Checkbox({ isChecked }: CheckboxProps) {
-  return <input type="checkbox" checked={isChecked} />;
+export default function Checkbox({ isChecked, ...rest }: CheckboxProps) {
+  return <input type="checkbox" checked={isChecked} {...rest} />;
 }

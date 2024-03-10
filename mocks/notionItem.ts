@@ -31,4 +31,8 @@ export const notionItem = [
   rest.delete(DELETE_URL.NOTION_ITEM_MOCK(), (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({}));
   }),
+
+  rest.delete(DELETE_URL.NOTION_RELEVANCE_MOCK(), (req, res, ctx) => {
+    return res(ctx.status(201), ctx.json({}));
+  }),
 ];

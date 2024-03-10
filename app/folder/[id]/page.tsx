@@ -54,6 +54,7 @@ export default function Page({ params }: { params: { id: number } }) {
         <NotionListForEditRelevance
           notionId={notion.id}
           notionListInFolder={data.notions}
+          exitBottomSheet={exitEditRelevanceSheet}
         />
       </BottomSheet>
     ));

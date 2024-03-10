@@ -13,6 +13,11 @@ export interface EssentialNotion {
   name: string;
 }
 
+export interface Graph {
+  id: number; //graphID
+  notions: number[]; //notionID
+}
+
 export interface RelevanceNotion {
   id: number;
   name: string;
@@ -47,4 +52,14 @@ export interface RequestRelatedNotion {
   id: number;
   relevance: string;
   reverseRelevance: string;
+}
+
+export interface RequestDeleteRelevance {
+  id_1: number;
+  id_2: number;
+}
+
+export interface RequestMergeFolder {
+  name: string;
+  notionFolderIds: number[];
 }

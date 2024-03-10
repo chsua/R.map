@@ -27,6 +27,7 @@ import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import ToggleBox from '@components/common/ToggleBox';
 import ToggleButton from '@components/common/ToggleButton';
 import { ToggleControlRef } from 'types/etc';
+import { useDeleteOneRelevance } from 'hooks/query/useDeleteOneRelevance';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { data: notionData } = useGetNotion(params.id);
@@ -87,6 +88,10 @@ export default function Page({ params }: { params: { id: number } }) {
     exitRelatedNotionMoreButtonBottomSheet();
   });
 
+  const { mutate: deleteRelevance } = useDeleteOneRelevance(params.id, () => {
+    exitRelatedNotionMoreButtonBottomSheet();
+  });
+
   if (!notionData) {
     return <></>;
   }
@@ -144,7 +149,7 @@ export default function Page({ params }: { params: { id: number } }) {
             <ButtonWithCircle
               text={'연결 관계 끊기'}
               handleButtonClick={() => {
-                alert('준비중인 기능입니다.');
+                deleteRelevance({ id_1: params.id, id_2: notion.id });
               }}
             />
             <ButtonWithCircle
