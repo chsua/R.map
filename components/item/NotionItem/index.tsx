@@ -4,12 +4,14 @@ import MoreMenuButton from '../../common/MoreMenuButton';
 import CircleLine from '../../common/CircleLine';
 import RoundSquare from '../../common/RoundSquare';
 import ToggleButton from '@components/common/ToggleButton';
+import { Color } from 'types/style';
 
 interface NotionItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   content: string;
   handleNotionItemClick?: () => void;
   handleMoreMenuButtonClick?: () => void;
   handleToggleButtonClick?: () => void;
+  color?: Color;
 }
 
 export default function NotionItem({
@@ -17,6 +19,7 @@ export default function NotionItem({
   handleNotionItemClick,
   handleMoreMenuButtonClick,
   handleToggleButtonClick,
+  color,
 }: NotionItemProps) {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
   const handleMoreNotionButtonClickWithoutBubbling: MouseEventHandler<
@@ -27,7 +30,7 @@ export default function NotionItem({
   };
 
   return (
-    <RoundSquare size="sm">
+    <RoundSquare size="sm" color={color}>
       <div className="w-[90%] flex flex-row items-center justify-between gap-2">
         {handleToggleButtonClick ? (
           <ToggleButton

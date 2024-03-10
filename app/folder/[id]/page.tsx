@@ -17,11 +17,18 @@ import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import { useGetNotionListInfolder } from 'hooks/query/useGetNotionListInfolder';
 import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import NotionListForEditRelevance from '@components/item/NotionListForEditRelevance';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useGetGraphList } from 'hooks/query/useGetGraphList';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { moveNotionItemPage } = useMovePage();
-  const { data } = useGetNotionListInfolder(params.id);
+  const { data: notionList } = useGetNotionListInfolder(params.id);
+  const { data: graphList } = useGetGraphList(params.id);
+  const graphData = new Map();
+  graphList?.forEach(({ notions }, index) =>
+    notions.forEach((notionId) => graphData.set(notionId, index)),
+  );
+  const [hoverGraphId, setHoverGraphId] = useState<number | null>(null);
 
   const {
     open: openSubmitButtonBottomSheet,
@@ -41,7 +48,7 @@ export default function Page({ params }: { params: { id: number } }) {
     exitMoreButtonBottomSheet,
   );
 
-  if (!data) {
+  if (!notionList) {
     return <></>;
   }
 
@@ -53,7 +60,8 @@ export default function Page({ params }: { params: { id: number } }) {
         </p>
         <NotionListForEditRelevance
           notionId={notion.id}
-          notionListInFolder={data.notions}
+          notionListInFolder={notionList.notions}
+          exitBottomSheet={exitEditRelevanceSheet}
         />
       </BottomSheet>
     ));
@@ -64,7 +72,7 @@ export default function Page({ params }: { params: { id: number } }) {
       <BottomSheet closeEvent={() => exitSubmitButtonBottomSheet()}>
         <div className="my-5 py-7 w-full flex justify-center">
           <NotionForm
-            notionFolderId={data.id}
+            notionFolderId={notionList.id}
             data={notion}
             subEvent={() => {
               exitSubmitButtonBottomSheet();
@@ -101,13 +109,26 @@ export default function Page({ params }: { params: { id: number } }) {
 
   return (
     <main className="flex flex-col gap-5">
-      <Title content={(data && data.name) ?? '무제'} />
+      <Title content={(notionList && notionList.name) ?? '무제'} />
       <CircleLine amount={8} />
       <NotionList style="md:grid-cols-2 lg:grid-cols-3">
-        {data.notions.map((item) => {
+        {notionList.notions.map((item) => {
           return (
-            <li key={item.name}>
+            <li
+              key={item.name}
+              onMouseOver={() => {
+                graphData.size > 0 && setHoverGraphId(graphData.get(item.id));
+              }}
+              onMouseOut={() => {
+                graphData.size > 0 && setHoverGraphId(null);
+              }}
+            >
               <NotionItem
+                color={
+                  graphData.size > 0 && graphData.get(item.id) === hoverGraphId
+                    ? 'lightBlue'
+                    : 'default'
+                }
                 content={item.name}
                 handleMoreMenuButtonClick={() => openBottomSheetForNotion(item)}
                 handleNotionItemClick={() => handleNotionItemClick(item.id)}

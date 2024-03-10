@@ -22,6 +22,10 @@ export const notionFolder = [
   rest.delete(DELETE_URL.NOTION_FOLDER_MOCK(), (req, res, ctx) => {
     return res(ctx.status(mockingStatus.delete.notionFolder), ctx.json({}));
   }),
+
+  rest.post(POST_URL.NOTION_FOLDER_MERGE_MOCK(), (req, res, ctx) => {
+    return res(ctx.status(mockingStatus.post.notionFolderMerge), ctx.json({}));
+  }),
 ];
 
 export const getNotionListInFolder = [

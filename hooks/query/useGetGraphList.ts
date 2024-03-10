@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEY } from 'constants/queryKey';
 import { GET_URL } from 'constants/url';
-import { EssentialNotion, NotionFolder } from 'types/notion';
+import { Graph } from 'types/notion';
 import { getFetch } from 'utils/fetch';
 
-export const useGetNotionFolderList = () => {
+export const useGetGraphList = (folderId: number) => {
+  const url = GET_URL.GRAPH_LIST(folderId);
+
   const { data, error, isError, isLoading, refetch } = useQuery(
-    [QUERY_KEY.NOTION_FOLDER_LIST],
-    () => getFetch<EssentialNotion[]>(GET_URL.NOTION_FOLDER_LIST()),
+    [QUERY_KEY.GRAPH, String(folderId)],
+    () => getFetch<Graph[]>(url),
     {
       suspense: true,
       onSuccess: (data) => {

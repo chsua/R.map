@@ -27,6 +27,7 @@ import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import ToggleBox from '@components/common/ToggleBox';
 import ToggleButton from '@components/common/ToggleButton';
 import { ToggleControlRef } from 'types/etc';
+import { useDeleteOneRelevance } from 'hooks/query/useDeleteOneRelevance';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { data: notionData } = useGetNotion(params.id);
@@ -65,25 +66,15 @@ export default function Page({ params }: { params: { id: number } }) {
     );
   };
 
-  useEffect(() => {
-    if (notionData) {
-      updateRecentlyNotionList(
-        { id: notionData.id, name: notionData.name },
-        notionData.id,
-        notionData.relatedNotions,
-      );
-      updateNowNotionFolder({
-        id: notionData.notionFolder.id,
-        name: notionData.notionFolder.name,
-      });
-    }
-  }, []);
-
   const { mutate: deleteOriginNotion } = useDeleteNotion(params.id, () => {
     exitNotionMoreButtonBottomSheet();
     notionData && moveNotionFolderItemListPage(notionData.notionFolder.id);
   });
   const { mutate: deleteRelevanceNotion } = useDeleteNotion(params.id, () => {
+    exitRelatedNotionMoreButtonBottomSheet();
+  });
+
+  const { mutate: deleteRelevance } = useDeleteOneRelevance(params.id, () => {
     exitRelatedNotionMoreButtonBottomSheet();
   });
 
@@ -144,7 +135,7 @@ export default function Page({ params }: { params: { id: number } }) {
             <ButtonWithCircle
               text={'연결 관계 끊기'}
               handleButtonClick={() => {
-                alert('준비중인 기능입니다.');
+                deleteRelevance({ id_1: params.id, id_2: notion.id });
               }}
             />
             <ButtonWithCircle
@@ -156,6 +147,27 @@ export default function Page({ params }: { params: { id: number } }) {
       </BottomSheet>
     ));
   };
+
+  useEffect(() => {
+    if (notionData) {
+      updateRecentlyNotionList(
+        { id: notionData.id, name: notionData.name },
+        notionData.id,
+        notionData.relatedNotions,
+      );
+      updateNowNotionFolder({
+        id: notionData.notionFolder.id,
+        name: notionData.notionFolder.name,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    setRelevanceNotionList(
+      notionData?.relatedNotions.map((info) => ({ ...info, isOpen: false })) ??
+        [],
+    );
+  }, [notionData]);
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-5">
