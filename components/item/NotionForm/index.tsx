@@ -53,7 +53,7 @@ export default function NotionForm({
     e.preventDefault();
 
     if (title.length < 1 || title.length > NOTION_TITLE_AMOUNT) return;
-    if (content.length < 1 || content.length > NOTION_CONTENT_AMOUNT) return;
+    if (content.length > NOTION_CONTENT_AMOUNT) return;
 
     if (data) {
       patchNotion?.mutate({ name: title, content });
