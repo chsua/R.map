@@ -4,11 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Size } from 'types/style';
 
-import { ToastInfo } from '@hooks/context/toast';
-
-import { TOAST_TIME } from '@constants/animation';
-
 import Toast from '.';
+import { TOAST_TIME, ToastInfo } from '@components/context/toast';
 
 const meta: Meta<typeof Toast> = {
   component: Toast,
