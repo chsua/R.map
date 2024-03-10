@@ -2,7 +2,6 @@ import { useToastContext } from '@components/context/toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from 'constants/queryKey';
 import { DELETE_URL } from 'constants/url';
-import { RequestNotionForPost } from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
 
 export const useDeleteNotion = (folderId: number, subEvent?: () => void) => {
