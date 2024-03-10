@@ -189,6 +189,19 @@ export default function Page({ params }: { params: { id: number } }) {
       </div>
       <NotionList>
         {relevanceNotionList.map((item) => {
+          if (item.relevance === '')
+            return (
+              <li key={item.name}>
+                <NotionItem
+                  content={item.name}
+                  handleMoreMenuButtonClick={() =>
+                    openBottomSheetForRelatedNotion(item)
+                  }
+                  handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                />
+              </li>
+            );
+
           return (
             <li
               key={item.name}
