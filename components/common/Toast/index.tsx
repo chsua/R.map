@@ -1,8 +1,7 @@
 import { memo, useState } from 'react';
 
-import { Size } from '@type/style';
-
-import { TOAST_TIME } from '@constants/animation';
+import { Size } from 'types/style';
+import { TOAST_TIME } from '@components/context/toast';
 
 import * as S from './style';
 
