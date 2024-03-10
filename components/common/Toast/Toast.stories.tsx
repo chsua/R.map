@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Size } from '@type/style';
+import { Size } from 'types/style';
 
 import { ToastInfo } from '@hooks/context/toast';
 
@@ -46,21 +46,26 @@ export const SizeCase = (args: { size: Size | 'free' }) => {
   }, [toastList]);
 
   const addMessage = (message: string) => {
-    if (toastList.find(toast => toast.text === message)) return;
+    if (toastList.find((toast) => toast.text === message)) return;
 
     const id = Date.now();
-    setToastList(toastList => [...toastList, { id, text: message }]);
+    setToastList((toastList) => [...toastList, { id, text: message }]);
   };
 
   return (
     <>
       <button
         onClick={() => addMessage(`toast no.${toastList.length + 1}`)}
-        style={{ display: 'block', margin: '10px', background: 'gray', cursor: 'pointer' }}
+        style={{
+          display: 'block',
+          margin: '10px',
+          background: 'gray',
+          cursor: 'pointer',
+        }}
       >
         토스트 열기 버튼
       </button>
-      {toastList.map(toast => (
+      {toastList.map((toast) => (
         <Toast key={toast.id} {...args}>
           {toast.text}
         </Toast>

@@ -1,6 +1,6 @@
 import { keyframes, styled } from 'styled-components';
 
-import { Size } from '@type/style';
+import { Size } from 'types/style';
 
 import { TOAST_TIME } from '@constants/animation';
 
@@ -16,12 +16,12 @@ export const fadeInOutAnimation = keyframes`
 `;
 
 export const Content = styled.div<{ $size: Size | 'free'; $isShown: boolean }>`
-  display: ${props => (props.$isShown ? 'flex' : 'none')};
+  display: ${(props) => (props.$isShown ? 'flex' : 'none')};
   align-items: center;
   justify-content: center;
 
-  width: ${props => SQUARE_SIZE[props.$size].width};
-  min-height: ${props => SQUARE_SIZE[props.$size].height};
+  width: ${(props) => SQUARE_SIZE[props.$size].width};
+  min-height: ${(props) => SQUARE_SIZE[props.$size].height};
   border-radius: 4px;
   padding: 10px 15px;
 
