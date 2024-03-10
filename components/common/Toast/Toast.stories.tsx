@@ -1,11 +1,11 @@
 import type { Meta } from '@storybook/react';
 
 import { useEffect, useRef, useState } from 'react';
+import { TOAST_TIME, ToastInfo } from '@components/context/toast';
 
 import { Size } from 'types/style';
 
 import Toast from '.';
-import { TOAST_TIME, ToastInfo } from '@components/context/toast';
 
 const meta: Meta<typeof Toast> = {
   component: Toast,

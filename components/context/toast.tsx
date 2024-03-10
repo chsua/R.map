@@ -2,6 +2,7 @@ import ToastContainer from '@components/common/ToastContainer';
 import {
   PropsWithChildren,
   createContext,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -16,7 +17,7 @@ interface ToastContextProps {
   addMessage: (message: string) => void;
 }
 
-export const ToastContext = createContext<ToastContextProps>({
+export const toastContext = createContext<ToastContextProps>({
   addMessage: (message: string) => {},
 });
 
@@ -25,7 +26,7 @@ export const ToastContext = createContext<ToastContextProps>({
  */
 export const TOAST_TIME = 3000;
 
-export default function ToastProvider({ children }: PropsWithChildren) {
+export default function ToastContext({ children }: PropsWithChildren) {
   const [toastList, setToastList] = useState<ToastInfo[]>([]);
 
   const timeId = useRef<number | null>(null);
@@ -50,9 +51,11 @@ export default function ToastProvider({ children }: PropsWithChildren) {
   };
 
   return (
-    <ToastContext.Provider value={{ addMessage }}>
+    <toastContext.Provider value={{ addMessage }}>
       <ToastContainer toastList={toastList} />
       {children}
-    </ToastContext.Provider>
+    </toastContext.Provider>
   );
 }
+
+export const useToastContext = () => useContext(toastContext);

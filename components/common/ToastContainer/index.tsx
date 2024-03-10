@@ -1,5 +1,4 @@
 import { ToastInfo } from '@components/context/toast';
-import * as S from './style';
 import Toast from '../Toast';
 interface ToastContainerProps {
   toastList: ToastInfo[];
@@ -7,12 +6,12 @@ interface ToastContainerProps {
 
 export default function ToastContainer({ toastList }: ToastContainerProps) {
   return (
-    <S.Container>
+    <div className="w-4/5 fixed bottom-[20vh] left-[10%] flex flex-col gap-1 z-50">
       {toastList.map((toast) => (
         <Toast key={toast.id} size="free">
           {toast.text}
         </Toast>
       ))}
-    </S.Container>
+    </div>
   );
 }

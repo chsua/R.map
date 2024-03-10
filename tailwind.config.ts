@@ -34,8 +34,8 @@ const config: Config = {
       animation: {
         bottomUp: 'bottomUp 0.35s ease-in-out forwards',
         bottomDown: 'bottomDown 0.35s ease-in-out forwards',
-        fadeIn: 'fadeIn 0.35s ease-in-out forwards',
-        fadeOut: 'fadeOut 0.35s ease-in-out forwards',
+        fadeIn: 'fadeIn 0.3s ease-in-out forwards',
+        fadeOut: 'fadeOut 0.3s ease-in-out forwards',
       },
     },
   },
