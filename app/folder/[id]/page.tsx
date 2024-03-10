@@ -19,16 +19,22 @@ import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import NotionListForEditRelevance from '@components/item/NotionListForEditRelevance';
 import { useEffect, useState } from 'react';
 import { useGetGraphList } from 'hooks/query/useGetGraphList';
+import { useToastContext } from '@components/context/toast';
+import { useSplitFolder } from 'hooks/query/useSplitFolder';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { moveNotionItemPage } = useMovePage();
   const { data: notionList } = useGetNotionListInfolder(params.id);
-  const { data: graphList } = useGetGraphList(params.id);
+  const { data: graphList = [] } = useGetGraphList(params.id);
+  const { addMessage } = useToastContext();
   const graphData = new Map();
-  graphList?.forEach(({ notions }, index) =>
-    notions.forEach((notionId) => graphData.set(notionId, index)),
+  graphList?.forEach(({ notionIds }, index) =>
+    notionIds.forEach((notionId) => graphData.set(notionId, index)),
   );
   const [hoverGraphId, setHoverGraphId] = useState<number | null>(null);
+  const [targetName, setTargetName] = useState('');
+  const [isSplitFolderMode, setIsSplitFolderMode] = useState(false);
+  const { mutate: splitFolder } = useSplitFolder(params.id);
 
   const {
     open: openSubmitButtonBottomSheet,
@@ -53,6 +59,9 @@ export default function Page({ params }: { params: { id: number } }) {
   }
 
   const openBottomSheetForRelevanceEdit = (notion: EssentialNotion) => {
+    if (notionList.notions.length === 1)
+      return addMessage('관계수정 기능은 개념이 2개 이상일 때 가능합니다.');
+
     openEditRelevanceSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitEditRelevanceSheet()}>
         <p className="text-lg font-medium text-left w-[90%] pt-8">
@@ -60,6 +69,7 @@ export default function Page({ params }: { params: { id: number } }) {
         </p>
         <NotionListForEditRelevance
           notionId={notion.id}
+          folderId={params.id}
           notionListInFolder={notionList.notions}
           exitBottomSheet={exitEditRelevanceSheet}
         />
@@ -101,6 +111,13 @@ export default function Page({ params }: { params: { id: number } }) {
                 openBottomSheetForRelevanceEdit(notion);
               }}
             />
+            <ButtonWithCircle
+              text={'폴더 분리하기'}
+              handleButtonClick={() => {
+                exitMoreButtonBottomSheet();
+                setIsSplitFolderMode(true);
+              }}
+            />
           </NotionInfo>
         </div>
       </BottomSheet>
@@ -126,12 +143,29 @@ export default function Page({ params }: { params: { id: number } }) {
               <NotionItem
                 color={
                   graphData.size > 0 && graphData.get(item.id) === hoverGraphId
-                    ? 'lightBlue'
+                    ? isSplitFolderMode
+                      ? 'lightOrange'
+                      : 'lightBlue'
                     : 'default'
                 }
                 content={item.name}
-                handleMoreMenuButtonClick={() => openBottomSheetForNotion(item)}
-                handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                handleMoreMenuButtonClick={
+                  isSplitFolderMode
+                    ? undefined
+                    : () => openBottomSheetForNotion(item)
+                }
+                handleNotionItemClick={
+                  isSplitFolderMode
+                    ? () => {
+                        if (targetName === '') return;
+
+                        splitFolder({
+                          notionId: item.id,
+                          data: { name: targetName },
+                        });
+                      }
+                    : () => handleNotionItemClick(item.id)
+                }
               />
             </li>
           );
@@ -140,6 +174,29 @@ export default function Page({ params }: { params: { id: number } }) {
           <PlusNotionButton onClick={() => openBottomSheetForNotionSubmit()} />
         </li>
       </NotionList>
+      {isSplitFolderMode && (
+        <div>
+          <span className="text-lg font-bold mr-2">
+             ❐ 분리하고자 하는 폴더 이름을 짓고 개념집합을 선택해주세요.
+          </span>
+          <button
+            type="button"
+            className="bg-slate-200 px-2 rounded-md text-sm"
+            onClick={() => setIsSplitFolderMode(false)}
+          >
+            편집모드 해제
+          </button>
+          <br />
+          <span className="text-lg font-bold mr-2">
+             ❐ 분리하는 폴더의 이름 :
+          </span>
+          <input
+            className="border-2 rounded-md text-sm border-slate-400 px-1 mt-3 mr-2"
+            value={targetName}
+            onChange={(e) => setTargetName(e.target.value)}
+          />
+        </div>
+      )}
     </main>
   );
 }

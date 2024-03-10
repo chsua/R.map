@@ -16,6 +16,7 @@ interface RecentlyNotionContextProps {
     relationNotionList: EssentialNotion[],
   ) => void;
   resetAllData: () => void;
+  deleteNotion: (id: number) => void;
 }
 
 const limitCount = 7;
@@ -31,6 +32,7 @@ export const recentlyNotionContext = createContext<RecentlyNotionContextProps>({
     relationNotionList: EssentialNotion[],
   ) => {},
   resetAllData: () => {},
+  deleteNotion: () => {},
 });
 
 export default function RecentlyNotionContext({
@@ -98,6 +100,18 @@ export default function RecentlyNotionContext({
     setRecentlyNotionList([]);
   };
 
+  const deleteNotion = (notionId: number) => {
+    const notOverlapList = recentlyNotionList.filter(
+      ({ id }) => id !== notionId,
+    );
+
+    console.log(notOverlapList);
+    if (notOverlapList.length === recentlyNotionList.length) return;
+
+    console.log(notOverlapList);
+    setRecentlyNotionList(notOverlapList);
+  };
+
   return (
     <recentlyNotionContext.Provider
       value={{
@@ -106,6 +120,7 @@ export default function RecentlyNotionContext({
         recentlyNotionList,
         updateRecentlyNotionList,
         resetAllData,
+        deleteNotion,
       }}
     >
       {children}

@@ -23,7 +23,7 @@ export default function RelevanceInputToggle({
   setRelevance,
   setReverseRelevance,
 }: RelevanceInputToggleProps) {
-  const [toggleOpen, setToggleOpen] = useState(false);
+  const [toggleOpen, setToggleOpen] = useState(true);
   const [userInput, setUserInput] = useState<
     Pick<RelevanceNotion, 'relevance' | 'reverseRelevance'>
   >({ relevance: notion.relevance, reverseRelevance: notion.reverseRelevance });

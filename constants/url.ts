@@ -21,6 +21,9 @@ export const POST_URL = {
   NOTION_FOLDER: () => `${base}/notion-folders`,
   NOTION_FOLDER_MERGE_MOCK: () => '/notion-folders/merge',
   NOTION_FOLDER_MERGE: () => `${base}/notion-folders/merge`,
+  NOTION_FOLDER_SPLIT_MOCK: () => `/notion-folders/:id?notionId=:id`,
+  NOTION_FOLDER_SPLIT: (folderId: number, notionId: number) =>
+    `${base}/notion-folders/${folderId}?notionId=${notionId}`,
 };
 
 export const DELETE_URL = {

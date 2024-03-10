@@ -14,7 +14,7 @@ export interface EssentialNotion {
 }
 
 export interface Graph {
-  notions: number[]; //notionID
+  notionIds: number[]; //notionID
 }
 
 export interface RelevanceNotion {
@@ -61,4 +61,8 @@ export interface RequestDeleteRelevance {
 export interface RequestMergeFolder {
   name: string;
   notionFolderIds: number[];
+}
+
+export interface RequestSplitFolder {
+  name: string;
 }

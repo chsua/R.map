@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRecentlyNotionContext } from '@components/context/RecentlyNotionContext';
 import CircleLine from '@components/common/CircleLine';
@@ -10,8 +10,6 @@ import NotionList from '@components/item/NotionList';
 
 import { useMovePage } from 'hooks/useMovePage';
 
-import { GET_URL } from 'constants/url';
-import { getFetch } from 'utils/fetch';
 import { Notion, EssentialNotion } from 'types/notion';
 import NotionItem from '@components/item/NotionItem';
 import PlusNotionButton from '@components/item/PlusNotionButton';
@@ -19,14 +17,11 @@ import { useModal } from 'hooks/useModal';
 import BottomSheet from '@components/common/BottomSheet';
 import NotionForm from '@components/item/NotionForm';
 import NotionInfo from '@components/item/NotionInfo';
-import { deleteNotion } from 'utils/deleteNotion';
 import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import MoreMenuButton from '@components/common/MoreMenuButton';
 import { useGetNotion } from 'hooks/query/useGetNotion';
 import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import ToggleBox from '@components/common/ToggleBox';
-import ToggleButton from '@components/common/ToggleButton';
-import { ToggleControlRef } from 'types/etc';
 import { useDeleteOneRelevance } from 'hooks/query/useDeleteOneRelevance';
 
 export default function Page({ params }: { params: { id: number } }) {
@@ -189,6 +184,19 @@ export default function Page({ params }: { params: { id: number } }) {
       </div>
       <NotionList>
         {relevanceNotionList.map((item) => {
+          if (item.relevance === '')
+            return (
+              <li key={item.name}>
+                <NotionItem
+                  content={item.name}
+                  handleMoreMenuButtonClick={() =>
+                    openBottomSheetForRelatedNotion(item)
+                  }
+                  handleNotionItemClick={() => handleNotionItemClick(item.id)}
+                />
+              </li>
+            );
+
           return (
             <li
               key={item.name}

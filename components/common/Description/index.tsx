@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function Description({ content }: { content: string }) {
-  const [isNowBlur, setIsNowBlur] = useState(true);
+  const [isNowBlur, setIsNowBlur] = useState(false);
 
   const toggleBlur = () => {
     setIsNowBlur(!isNowBlur);

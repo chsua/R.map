@@ -10,6 +10,7 @@ interface NotionListForEditRelevanceProps {
   notionId: number;
   notionListInFolder: EssentialNotion[];
   exitBottomSheet?: () => void;
+  folderId: number;
 }
 
 /**
@@ -19,11 +20,12 @@ interface NotionListForEditRelevanceProps {
  */
 export default function NotionListForEditRelevance({
   notionId,
+  folderId,
   notionListInFolder,
   exitBottomSheet,
 }: NotionListForEditRelevanceProps) {
   const { data: notion } = useGetNotion(notionId);
-  const { mutate } = useEditRelatedNotion(notionId, exitBottomSheet);
+  const { mutate } = useEditRelatedNotion(notionId, folderId, exitBottomSheet);
   if (!notion) {
     return <></>;
   }
@@ -77,11 +79,6 @@ export default function NotionListForEditRelevance({
     const result: RequestRelatedNotion[] = [];
     notionList.forEach((notion) => {
       if (!notion.isChecked) return;
-      if (
-        notionRef.current[notion.id].relevance === '' ||
-        notionRef.current[notion.id].reverseRelevance === ''
-      )
-        return alert('비어있는 관계설명이 있습니다.');
 
       result.push(notionRef.current[notion.id]);
     });

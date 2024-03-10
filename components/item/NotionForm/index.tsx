@@ -9,7 +9,7 @@ import {
 import { PATCH_URL, POST_URL } from 'constants/url';
 import { usePatchNotion } from 'hooks/query/usePatchNotion';
 import { usePostNotion } from 'hooks/query/usePostNotion';
-import React, { FormEventHandler, useState } from 'react';
+import React, { FormEventHandler, useEffect, useState } from 'react';
 import {
   EssentialNotion,
   Notion,
@@ -53,7 +53,7 @@ export default function NotionForm({
     e.preventDefault();
 
     if (title.length < 1 || title.length > NOTION_TITLE_AMOUNT) return;
-    if (content.length < 1 || content.length > NOTION_CONTENT_AMOUNT) return;
+    if (content.length > NOTION_CONTENT_AMOUNT) return;
 
     if (data) {
       patchNotion?.mutate({ name: title, content });
