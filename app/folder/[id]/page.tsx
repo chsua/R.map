@@ -17,13 +17,15 @@ import ButtonWithCircle from '@components/common/ButtonWithCircle';
 import { useGetNotionListInfolder } from 'hooks/query/useGetNotionListInfolder';
 import { useDeleteNotion } from 'hooks/query/useDeleteNotion';
 import NotionListForEditRelevance from '@components/item/NotionListForEditRelevance';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGetGraphList } from 'hooks/query/useGetGraphList';
+import { useToastContext } from '@components/context/toast';
 
 export default function Page({ params }: { params: { id: number } }) {
   const { moveNotionItemPage } = useMovePage();
   const { data: notionList } = useGetNotionListInfolder(params.id);
   const { data: graphList } = useGetGraphList(params.id);
+  const { addMessage } = useToastContext();
   const graphData = new Map();
   graphList?.forEach(({ notions }, index) =>
     notions.forEach((notionId) => graphData.set(notionId, index)),
@@ -53,6 +55,9 @@ export default function Page({ params }: { params: { id: number } }) {
   }
 
   const openBottomSheetForRelevanceEdit = (notion: EssentialNotion) => {
+    if (notionList.notions.length === 1)
+      return addMessage('관계수정 기능은 개념이 2개 이상일 때 가능합니다.');
+
     openEditRelevanceSheet(({ isOpen, close }) => (
       <BottomSheet size="free" closeEvent={() => exitEditRelevanceSheet()}>
         <p className="text-lg font-medium text-left w-[90%] pt-8">
