@@ -5,7 +5,11 @@ import { PATCH_URL } from 'constants/url';
 import { RequestRelatedNotion } from 'types/notion';
 import { fetchWithoutGet } from 'utils/fetch';
 
-export const useEditRelatedNotion = (id: number, subEvent?: () => void) => {
+export const useEditRelatedNotion = (
+  id: number,
+  folderId: number,
+  subEvent?: () => void,
+) => {
   const queryClient = useQueryClient();
   const { addMessage } = useToastContext();
 
@@ -15,7 +19,8 @@ export const useEditRelatedNotion = (id: number, subEvent?: () => void) => {
     {
       onSuccess: () => {
         //왜 쿼리키가 숫자면 무효화가 되지 않지?
-        queryClient.invalidateQueries([QUERY_KEY.NOTION, String(id)]);
+        console.log(folderId);
+        queryClient.invalidateQueries([QUERY_KEY.GRAPH, String(folderId)]);
 
         subEvent && subEvent();
         addMessage('관련성을 수정했습니다.');

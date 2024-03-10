@@ -10,6 +10,7 @@ interface NotionListForEditRelevanceProps {
   notionId: number;
   notionListInFolder: EssentialNotion[];
   exitBottomSheet?: () => void;
+  folderId: number;
 }
 
 /**
@@ -19,11 +20,12 @@ interface NotionListForEditRelevanceProps {
  */
 export default function NotionListForEditRelevance({
   notionId,
+  folderId,
   notionListInFolder,
   exitBottomSheet,
 }: NotionListForEditRelevanceProps) {
   const { data: notion } = useGetNotion(notionId);
-  const { mutate } = useEditRelatedNotion(notionId, exitBottomSheet);
+  const { mutate } = useEditRelatedNotion(notionId, folderId, exitBottomSheet);
   if (!notion) {
     return <></>;
   }

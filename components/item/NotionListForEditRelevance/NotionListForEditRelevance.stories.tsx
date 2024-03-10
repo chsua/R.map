@@ -14,4 +14,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = { args: { notionId: 1, notionListInFolder: [] } };
+export const Default: Story = {
+  args: { notionId: 1, folderId: 1, notionListInFolder: [] },
+};

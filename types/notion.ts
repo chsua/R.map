@@ -14,7 +14,7 @@ export interface EssentialNotion {
 }
 
 export interface Graph {
-  notions: number[]; //notionID
+  notionIds: number[]; //notionID
 }
 
 export interface RelevanceNotion {
