@@ -62,3 +62,7 @@ export interface RequestMergeFolder {
   name: string;
   notionFolderIds: number[];
 }
+
+export interface RequestSplitFolder {
+  name: string;
+}
